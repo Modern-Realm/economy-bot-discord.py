@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 import mysql.connector as Mysql
 
-DB_HOST = "localhost"
+DB_HOST = "localhost" # or your selected port/id address
 DB_USER = # Enter the user name which you created / added in your database (or) just use root as username
 DB_PASSWD = # Enter the password of your added user or the root user ( default )
 DB_NAME = # Enter your Database Name which you created !

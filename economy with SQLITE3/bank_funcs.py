@@ -1,15 +1,15 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
-DB_HOST = "localhost" # or your selected port/id address
-DB_USER = # enter the username you created or root user
-DB_PASSWD = # enter the passwword you given for user or root user
-DB_NAME = # enter the database name which you created !
+
+import sqlite3
+
+file_name = # Enter your file_name here , with (.db, .sql, .sqlite3) suffix , Example: economy.db
 
 async def open_bank(user):
     columns = ["wallet", "bank"] # You can add more Columns in it !
 
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
+    db = sqlite3.connect(file_name)
     cursor = db.cursor()
     cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
     data = cursor.fetchone()
@@ -30,7 +30,7 @@ async def open_bank(user):
 
 
 async def get_bank_data(user):
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
+    db = sqlite3.connect(file_name)
     cursor = db.cursor()
     cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
     users = cursor.fetchone()
@@ -42,7 +42,7 @@ async def get_bank_data(user):
 
 
 async def update_bank(user, amount=0, mode="wallet"):
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
+    db = sqlite3.connect(file_name)
     cursor = db.cursor()
 
     cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
@@ -61,7 +61,7 @@ async def update_bank(user, amount=0, mode="wallet"):
 
 
 async def get_lb():
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
+    db = sqlite3.connect(file_name)
     cursor = db.cursor()
 
     cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")

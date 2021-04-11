@@ -12,7 +12,7 @@ file_name = # Enter your file_name which you created (Make sure to crate your fi
 # Remove the below code after creating the table !
 @client.command()
 async def create_table(ctx):
-    db = sqlite3.connect(file_name)
+    db = aiosqlite.connect(file_name)
     cursor = await db.cursor()
     
     cols = ["wallet", "bank"] # You can add as many as columns in this !!!

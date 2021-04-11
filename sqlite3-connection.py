@@ -1,5 +1,5 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHENIX - Sai Keerthan Reddy
+# from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
 
 import discord

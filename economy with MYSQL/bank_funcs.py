@@ -1,73 +1,57 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
-DB_HOST = "localhost" # or your selected port/id address
-DB_USER = # enter the username you created or root user
-DB_PASSWD = # enter the passwword you given for user or root user
-DB_NAME = # enter the database name which you created !
+
+from pymongo import MongoClient
+import os
+
+auth_url = # paste the url connection of the cluster here !!
+
+shop_items = ["watch", "tv", "mobile"]
+
 
 async def open_bank(user):
-    columns = ["wallet", "bank"] # You can add more Columns in it !
+    cluster = MongoClient(auth_url)
+    db = cluster["my_bot"]
 
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
-    cursor = db.cursor()
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = cursor.fetchone()
+    cursor = db["economy"]
 
-    if data is None:
-        cursor.execute(f"INSERT INTO economy(userID) VALUES({user.id})")
-        db.commit()
+    try:
+        post = {
+            "_id": user.id, "wallet": 5000, "bank": 0
+        }
+        cursor.insert_one(post)
 
-        for name in columns:
-            cursor.execute(f"UPDATE economy SET {name} = 0 WHERE userID = {user.id}")
-        db.commit()
-
-        cursor.execute(f"UPDATE economy SET wallet = 5000 WHERE userID = {user.id}")
-        db.commit()
-
-    cursor.close()
-    db.close()
+    except:
+        pass
 
 
 async def get_bank_data(user):
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
-    cursor = db.cursor()
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    users = cursor.fetchone()
+    cluster = MongoClient(auth_url)
+    db = cluster["my_bot"]
 
-    cursor.close()
-    db.close()
+    cursor = db["economy"]
 
-    return users
+    user_data = cursor.find({"_id": user.id})
+
+    cols = ["wallet", "bank"] # You can add as many columns as you can !!!
+
+    data = []
+
+    for mode in user_data:
+        for col in cols:
+            data1 = mode[str(col)]
+
+            data.append(data1)
+
+    return data
 
 
 async def update_bank(user, amount=0, mode="wallet"):
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
-    cursor = db.cursor()
+    cluster = MongoClient(auth_url)
+    db = cluster["my_bot"]
 
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = cursor.fetchone()
-    if data is not None:
-        cursor.execute(f"UPDATE economy SET {mode} = {mode} + {amount} WHERE userID = {user.id}")
-        db.commit()
+    cursor = db["economy"]
 
-    cursor.execute(f"SELECT {mode} FROM economy WHERE userID = {user.id}")
-    users = cursor.fetchone()
+    cursor.update_one({"_id": user.id}, {"$inc": {str(mode): amount}})
 
-    cursor.close()
-    db.close()
-
-    return users
-
-
-async def get_lb():
-    db = Mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
-    cursor = db.cursor()
-
-    cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
-    users = cursor.fetchall()
-
-    cursor.close()
-    db.close()
-
-    return users

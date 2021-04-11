@@ -1,7 +1,7 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
-file_name = "economy.db" # enter your file name here !
+file_name = # enter your file name here !
 
 
 async def open_bank(user):
@@ -18,13 +18,13 @@ async def open_bank(user):
 
         for name in columns:
             cursor.execute(f"UPDATE economy SET {name} = 0 WHERE userID = {user.id}")
-        db.commit()
+        await db.commit()
 
         cursor.execute(f"UPDATE economy SET wallet = 5000 WHERE userID = {user.id}")
-        db.commit()
+        await db.commit()
 
-    cursor.close()
-    db.close()
+    await cursor.close()
+    await db.close()
 
 
 async def get_bank_data(user):
@@ -33,10 +33,10 @@ async def get_bank_data(user):
     cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
     users = cursor.fetchone()
 
-    cursor.close()
+    await cursor.close()
     db.close()
 
-    return users
+    await return users
 
 
 async def update_bank(user, amount=0, mode="wallet"):
@@ -47,13 +47,13 @@ async def update_bank(user, amount=0, mode="wallet"):
     data = cursor.fetchone()
     if data is not None:
         cursor.execute(f"UPDATE economy SET {mode} = {mode} + {amount} WHERE userID = {user.id}")
-        db.commit()
+        await db.commit()
 
     cursor.execute(f"SELECT {mode} FROM economy WHERE userID = {user.id}")
     users = cursor.fetchone()
 
-    cursor.close()
-    db.close()
+    await cursor.close()
+    await db.close()
 
     return users
 
@@ -65,7 +65,7 @@ async def get_lb():
     cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
     users = cursor.fetchall()
 
-    cursor.close()
-    db.close()
+    await cursor.close()
+    await db.close()
 
     return users

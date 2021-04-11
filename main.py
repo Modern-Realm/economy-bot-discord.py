@@ -9,17 +9,11 @@ from discord.utils import get
 from pymongo import MongoClient
 from modules.form_funcs import open_form, get_form_data, update_form
 
-#  ========== SECRET DATA ==========
+TOKEN = ""
 
-TOKEN = "Nzc4Mjk0NTEyMjk2Mzk0ODQz.X7P5Pw.fP84mLEgTrSv8x6MXNXWNKY3G-A"
-
-# auth_url = "mongodb+srv://skr:skr.9885543066@cluster0.51vdr.mongodb.net/my_bot?retryWrites=true&w=majority"
+auth_url = ""
 
 extra_items = ["recieved", "sent", "robbed", "robbed_amt", "theft", "theft_amt"]
-
-# TOKEN = os.environ['token']
-
-#  ========== SECRET DATA ==========
 
 coin_icon = "<:pcoins:800002236863217664>"
 

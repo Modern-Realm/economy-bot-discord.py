@@ -1,5 +1,5 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHENIX
+# from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
 DB_HOST = "localhost"
 DB_USER = # enter the username you created or root user

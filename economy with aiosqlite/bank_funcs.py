@@ -9,18 +9,18 @@ async def open_bank(user):
 
     db = await aiosqlite.connect(file_name)
     cursor = await db.cursor()
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = cursor.fetchone()
+    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
+    data = await cursor.fetchone()
 
     if data is None:
-        cursor.execute(f"INSERT INTO economy(userID) VALUES({user.id})")
-        db.commit()
-
-        for name in columns:
-            cursor.execute(f"UPDATE economy SET {name} = 0 WHERE userID = {user.id}")
+        await cursor.execute(f"INSERT INTO economy(userID) VALUES({user.id})")
         await db.commit()
 
-        cursor.execute(f"UPDATE economy SET wallet = 5000 WHERE userID = {user.id}")
+        for name in columns:
+            await cursor.execute(f"UPDATE economy SET {name} = 0 WHERE userID = {user.id}")
+        await db.commit()
+
+        await cursor.execute(f"UPDATE economy SET wallet = 5000 WHERE userID = {user.id}")
         await db.commit()
 
     await cursor.close()
@@ -30,27 +30,27 @@ async def open_bank(user):
 async def get_bank_data(user):
     db = await aiosqlite.connect(file_name)
     cursor = await db.cursor()
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    users = cursor.fetchone()
+    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
+    users = await cursor.fetchone()
 
     await cursor.close()
-    db.close()
+    await db.close()
 
-    await return users
+    return users
 
 
 async def update_bank(user, amount=0, mode="wallet"):
     db = await aiosqlite.connect(file_name)
     cursor = await db.cursor()
 
-    cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = cursor.fetchone()
+    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
+    data = await cursor.fetchone()
     if data is not None:
-        cursor.execute(f"UPDATE economy SET {mode} = {mode} + {amount} WHERE userID = {user.id}")
+        await cursor.execute(f"UPDATE economy SET {mode} = {mode} + {amount} WHERE userID = {user.id}")
         await db.commit()
 
-    cursor.execute(f"SELECT {mode} FROM economy WHERE userID = {user.id}")
-    users = cursor.fetchone()
+    await cursor.execute(f"SELECT {mode} FROM economy WHERE userID = {user.id}")
+    users = await cursor.fetchone()
 
     await cursor.close()
     await db.close()
@@ -62,8 +62,21 @@ async def get_lb():
     db = await aiosqlite.connect(file_name)
     cursor = await db.cursor()
 
-    cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
-    users = cursor.fetchall()
+    await cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
+    users = await cursor.fetchall()
+
+    await cursor.close()
+    await db.close()
+
+    return users
+
+
+async def get_lb():
+    db = await aiosqlite.connect(file_name)
+    cursor = await db.cursor()
+
+    await cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
+    users = await cursor.fetchall()
 
     await cursor.close()
     await db.close()

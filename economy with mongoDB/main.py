@@ -34,8 +34,8 @@ async def balance(ctx):
 
 	users = await get_bank_data(user)
 
-	wallet_amt = users[1]
-	bank_amt = users[2]
+	wallet_amt = users[0]
+	bank_amt = users[1]
 
 	net_amt = int(wallet_amt + bank_amt)
 
@@ -56,7 +56,7 @@ async def withdraw(ctx, *,amount= None):
 
     users = await get_bank_data(user)
 
-    bank_amt = users[2]
+    bank_amt = users[1]
 
     try:
     	if amount.lower() == "all" or amount.lower() == "max":
@@ -66,11 +66,9 @@ async def withdraw(ctx, *,amount= None):
     except:
     	pass
 
-    bank = users[1]
-
     amount = int(amount)
 
-    if amount > bank:
+    if amount > bank_amt:
         await ctx.send(f"{user.mention} You don't have that enough money!")
         return
 
@@ -92,7 +90,7 @@ async def deposit(ctx, *,amount= None):
 
     users = await get_bank_data(user)
 
-    wallet_amt = users[1]
+    wallet_amt = users[0]
 
     try:
         if amount.lower() == "all" or amount.lower() == "max":

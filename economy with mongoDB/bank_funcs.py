@@ -1,13 +1,15 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
+# make sure to read the instructions in README.md file !!!
+
 
 from pymongo import MongoClient
 import os
 
 auth_url = # paste the url connection of the cluster here !!
 
-shop_items = ["watch", "tv", "mobile"]
+shop_items = ["watch", "tv", "mobile"] # You can add as many as items in this list !!!
 
 
 async def open_bank(user):
@@ -17,9 +19,8 @@ async def open_bank(user):
     cursor = db["economy"]
 
     try:
-        post = {
-            "_id": user.id, "wallet": 5000, "bank": 0
-        }
+        post = {"_id": user.id, "wallet": 5000, "bank": 0} # You can add as many columns as you can in this list !!!
+
         cursor.insert_one(post)
 
     except:
@@ -34,7 +35,7 @@ async def get_bank_data(user):
 
     user_data = cursor.find({"_id": user.id})
 
-    cols = ["wallet", "bank"] # You can add as many columns as you can !!!
+    cols = ["wallet", "bank"] # You can add as many columns as you can in this list !!!
 
     data = []
 

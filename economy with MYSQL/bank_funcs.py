@@ -1,6 +1,8 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
+# make sure to read the instructions in README.md file !!!
+
 DB_HOST = "localhost" # or your selected port/id address
 DB_USER = # enter the username you created or root user
 DB_PASSWD = # enter the passwword you given for user or root user

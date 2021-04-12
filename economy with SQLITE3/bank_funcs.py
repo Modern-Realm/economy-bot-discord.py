@@ -1,6 +1,8 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
 # from coder: SKR PHENIX - P.Sai Keerthan Reddy
 
+# make sure to read the instructions in README.md file !!!
+
 
 import sqlite3
 

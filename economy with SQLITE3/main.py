@@ -10,7 +10,7 @@ from discord.ext import commands
 import asyncio
 
 
-# TOKEN = # Enter your Bot Token here !!!
+TOKEN = # Enter your Bot Token here !!!
 
 
 intents = discord.Intents.all()

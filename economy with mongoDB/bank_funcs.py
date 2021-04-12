@@ -5,7 +5,6 @@
 
 
 from pymongo import MongoClient
-import os
 
 auth_url = # paste the url connection of the cluster here !!
 

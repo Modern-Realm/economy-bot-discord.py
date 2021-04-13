@@ -8,8 +8,6 @@ from pymongo import MongoClient
 
 auth_url = # paste the url connection of the cluster here !!
 
-shop_items = ["watch", "tv", "mobile"] # You can add as many as items in this list !!!
-
 
 async def open_bank(user):
     cluster = MongoClient(auth_url)

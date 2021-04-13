@@ -73,3 +73,4 @@ async def get_lb():
     db.close()
 
     return users
+

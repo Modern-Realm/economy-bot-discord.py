@@ -72,15 +72,3 @@ async def get_lb():
 
     return users
 
-
-async def get_lb():
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-
-    await cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
-    users = await cursor.fetchall()
-
-    await cursor.close()
-    await db.close()
-
-    return users

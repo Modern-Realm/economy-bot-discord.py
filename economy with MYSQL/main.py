@@ -91,13 +91,10 @@ async def deposit(ctx, *,amount= None):
 
     wallet_amt = users[1]
 
-    try:
-        if amount.lower() == "all" or amount.lower() == "max":
-            await update_bank(user, -1*wallet_amt)
-            await update_bank(user, +1*wallet_amt, "bank")
-            await ctx.send(f"{user.mention} you withdrew {wallet_amt} in your wallet")
-    except:
-    	pass
+    if amount.lower() == "all" or amount.lower() == "max":
+        await update_bank(user, -1*wallet_amt)
+        await update_bank(user, +1*wallet_amt, "bank")
+        await ctx.send(f"{user.mention} you withdrew {wallet_amt} in your wallet")
 
     amount = int(amount)
 

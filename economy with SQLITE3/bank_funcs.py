@@ -3,7 +3,6 @@
 
 # make sure to read the instructions in README.md file !!!
 
-
 import sqlite3
 
 file_name = # Enter your file_name here , with (.db, .sql, .sqlite3) suffix , Example: economy.db

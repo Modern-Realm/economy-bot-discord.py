@@ -63,11 +63,9 @@ async def withdraw(ctx, *,amount= None):
         await update_bank(user, -1*bank_amt, "bank")
         await ctx.send(f"{user.mention} you withdrew {bank_amt} in your wallet")
 
-    bank = users[1]
-
     amount = int(amount)
 
-    if amount > bank:
+    if amount > bank_amt:
         await ctx.send(f"{user.mention} You don't have that enough money!")
         return
 
@@ -113,26 +111,5 @@ async def deposit(ctx, *,amount= None):
     await update_bank(user, +1 * amount, "bank")
 
     await ctx.send(f"{user.mention} you withdrew **{amount}** from your **Bank!**")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 client.run(TOKEN)

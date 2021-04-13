@@ -114,25 +114,4 @@ async def deposit(ctx, *,amount= None):
 
     await ctx.send(f"{user.mention} you withdrew **{amount}** from your **Bank!**")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 client.run(TOKEN)

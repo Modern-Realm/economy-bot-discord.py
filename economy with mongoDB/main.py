@@ -58,13 +58,10 @@ async def withdraw(ctx, *,amount= None):
 
     bank_amt = users[1]
 
-    try:
-    	if amount.lower() == "all" or amount.lower() == "max":
-            await update_bank(user, +1*bank_amt)
-            await update_bank(user, -1*bank_amt, "bank")
-            await ctx.send(f"{user.mention} you withdrew {bank_amt} in your wallet")
-    except:
-    	pass
+    if amount.lower() == "all" or amount.lower() == "max":
+        await update_bank(user, +1*bank_amt)
+        await update_bank(user, -1*bank_amt, "bank")
+        await ctx.send(f"{user.mention} you withdrew {bank_amt} in your wallet")
 
     amount = int(amount)
 

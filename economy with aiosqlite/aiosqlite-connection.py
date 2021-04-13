@@ -18,11 +18,11 @@ async def create_table(ctx):
     
     cols = ["wallet", "bank"] # You can add as many as columns in this !!!
     
-    cursor.execute("""CREATE TABLE economy(userID BIGINT)""")
+    await cursor.execute("""CREATE TABLE economy(userID BIGINT)""")
     await db.commit()
     
     for col in cols:
-        cursor.execute(f"ALTER TABLE economy ADD COLUMN {col}")
+        await cursor.execute(f"ALTER TABLE economy ADD COLUMN {col}")
 
     await db.commit()
 

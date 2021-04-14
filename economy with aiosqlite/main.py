@@ -112,7 +112,7 @@ async def deposit(ctx, *,amount= None):
 
 @client.command()
 @commands.guild_only()
-async def leaderboard(self, ctx):
+async def leaderboard(ctx):
     users = await get_amt_lb()
 
     data = []

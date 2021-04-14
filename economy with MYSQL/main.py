@@ -111,4 +111,49 @@ async def deposit(ctx, *,amount= None):
 
     await ctx.send(f"{user.mention} you withdrew **{amount}** from your **Bank!**")
 
+
+@client.command(aliases=["lb"])
+@commands.guild_only()
+async def leaderboard(self, ctx):
+    users = await get_amt_lb()
+
+    data = []
+    index = 1
+
+    for member in users:
+        if index > 10:
+            break
+
+        member_name = self.client.get_user(member[0])
+        member_amt = member[1]
+
+        if index == 1:
+            msg1 = f"**🥇 `{member_name}` -- {member_amt}**"
+            data.append(msg1)
+
+        if index == 2:
+            msg2 = f"**🥈 `{member_name}` -- {member_amt}**"
+            data.append(msg2)
+
+        if index == 3:
+            msg3 = f"**🥉 `{member_name}` -- {member_amt}**\n"
+            data.append(msg3)
+
+        if index >= 4:
+            members = f"**{index} `{member_name}` -- {member_amt}**"
+            data.append(members)
+        index += 1
+
+    msg = "\n".join(data)
+
+    em = discord.Embed(
+        title=f"Top {index} Richest Users - Leaderboard",
+        description=f"It's Based on Net Worth (wallet + bank) of Global Users\n\n{msg}",
+        color=discord.Color(0x00ff00),
+        timestamp=datetime.datetime.utcnow()
+    )
+    em.set_footer(text=f"GLOBAL - {ctx.guild.name}")
+    await ctx.send(embed=em)
+
+
 client.run(TOKEN)

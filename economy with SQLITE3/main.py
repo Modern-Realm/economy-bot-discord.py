@@ -1,5 +1,5 @@
 # Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHENIX - P.Sai Keerthan Reddy
+# from coder: SKR PHOENIX - P.Sai Keerthan Reddy
 
 # These are basic codes/commands used for Economy Bot !!!
 # make sure to read the instructions in README.md file !!!

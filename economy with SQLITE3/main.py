@@ -111,8 +111,8 @@ async def deposit(ctx, *,amount= None):
 
     await ctx.send(f"{user.mention} you withdrew **{amount}** from your **Bank!**")
 
-@client.command()
-@commands.guild_only(aliases=["lb"])
+@client.command(aliases=["lb"])
+@commands.guild_only()
 async def leaderboard(ctx):
     users = await get_amt_lb()
 

@@ -1,14 +1,5 @@
-# Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHOENIX - P.Sai Keerthan Reddy
-
-# These are basic codes/commands used for Economy Bot !!!
-# make sure to read the instructions in README.md file !!!
-
-
 import discord
 from discord.ext import commands
-import asyncio
-
 
 shop_items = [
     {"name": "watch", "cost": 100, "id": 1, "info": "It's a watch"},
@@ -26,7 +17,7 @@ async def shop(ctx):
     await open_inv(user)
 
     em = discord.Embed(
-        title= "SHOP",
+        title="SHOP",
         color=discord.Color(0x00ff00)
     )
 
@@ -37,7 +28,7 @@ async def shop(ctx):
         cost = item["cost"]
         item_id = item["id"]
         item_info = item["info"]
-        
+
         x += 1
 
         if x > 1:
@@ -66,10 +57,10 @@ async def info(ctx, *, item_name=None):
                 title=f"{name.upper()}"
             )
 
-            sell_amt = int(cost/4)
+            sell_amt = int(cost / 4)
 
-            em.add_field(name="Buying price", value= cost, inline=False)
-            em.add_field(name="Selling price", value= sell_amt, inline=False)
+            em.add_field(name="Buying price", value=cost, inline=False)
+            em.add_field(name="Selling price", value=sell_amt, inline=False)
 
             await ctx.send(embed=em)
 

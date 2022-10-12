@@ -1,9 +1,20 @@
-# Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHOENIX - P.Sai Keerthan Reddy
+import sqlite3
 
-# make sure to read the instructions in README.md file !!!
+from bank_funcs import DB
 
-file_name = # enter your file name here !
+import discord
+
+from typing import Union, Any, Optional
+
+__all__ = [
+    "shop_items",
+    "open_inv",
+    "get_inv_data",
+    "update_inv",
+    "change_inv"
+]
+
+table_name = "inventory"  # Enter the table name here (tip:- use only lowercase letters)
 
 shop_items = [
     {"name": "watch", "cost": 100, "id": 1, "info": "It's a watch"},
@@ -13,54 +24,54 @@ shop_items = [
 ]
 
 
-async def open_inv(user):
-    db = sqlite3.connect(file_name)
-    cursor = db.cursor()
+async def create_table() -> None:
+    db = DB()
+    cols = [item["name"] for item in shop_items]
 
-    cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    data = cursor.fetchone()
+    db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
+    for col in cols:
+        try:
+            db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER")
+        except sqlite3.OperationalError:
+            pass
+
+
+async def open_inv(user: discord.Member) -> None:
+    await create_table()
+
+    db = DB()
+    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is None:
-        cursor.execute(f"INSERT INTO inventory(userID) VALUES({user.id})")
+        db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(?)", (user.id,))
 
         for item in shop_items:
             item_name = item["name"]
-            cursor.execute(f"UPDATE inventory SET `{item_name}` = 0 WHERE userID = {user.id}")
-
-        db.commit()
-
-    cursor.close()
-    db.close()
+            db.execute(f"UPDATE `{table_name}` SET `{item_name}` = ? WHERE userID = ?", (0, user.id,))
 
 
-async def get_inv_data(user):
-    db = sqlite3.connect(file_name)
-    cursor = db.cursor()
-
-    cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    users = cursor.fetchone()
-
-    cursor.close()
-    db.close()
-
+async def get_inv_data(user: discord.Member) -> Optional[Any]:
+    users = DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
-async def update_inv(user, amount: int, mode):
-    db = sqlite3.connect(file_name)
-    cursor = db.cursor()
-
-    cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    data = cursor.fetchone()
+async def update_inv(user: discord.Member, amount: Union[float, int], mode: str) -> Optional[Any]:
+    db = DB()
+    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is not None:
-        cursor.execute(f"UPDATE inventory SET `{mode}` = `{mode}` + {amount} WHERE userID = {user.id}")
-        db.commit()
+        db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
 
-    cursor.execute(f"SELECT `{mode}` FROM inventory WHERE userID = {user.id}")
-    users = cursor.fetchone()
+    users = db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    return users
 
-    cursor.close()
-    db.close()
 
+async def change_inv(user: discord.Member, amount: Union[float, int, None], mode: str) -> Optional[Any]:
+    db = DB()
+    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+
+    if data is not None:
+        db.execute(f"UPDATE `{table_name}` SET `{mode}` = ? WHERE userID = ?", (amount, user.id))
+
+    users = db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users

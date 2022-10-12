@@ -1,74 +1,98 @@
-# Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHOENIX - P.Sai Keerthan Reddy
+import aiosqlite
+import discord
 
-# make sure to read the instructions in README.md file !!!
+from typing import Tuple, Any, Optional, Union
 
-file_name = # enter your file name here !
+__all__ = [
+    "DB",
+    "open_bank",
+    "get_bank_data",
+    "update_bank",
+    "get_networth_lb"
+]
+
+filename = ...  # Enter your file_name here , with (.db, .sql, .sqlite3) suffix , Example: economy.db
+table_name = ...  # Enter the table name here (tip:- use only lowercase letters)
 
 
-async def open_bank(user):
-    columns = ["wallet", "bank"] # You can add more Columns in it !
+class Database:
+    @staticmethod
+    async def _connect():
+        return await aiosqlite.connect(filename)
 
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = await cursor.fetchone()
+    @staticmethod
+    async def _fetch(cursor, mode) -> Optional[Any]:
+        if mode == "one":
+            return await cursor.fetchone()
+        if mode == "many":
+            return await cursor.fetchmany()
+        if mode == "all":
+            return await cursor.fetchall()
+
+        return None
+
+    async def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
+        db = await self._connect()
+        cursor = await db.cursor()
+
+        await cursor.execute(query, values)
+        data = await self._fetch(cursor, fetch)
+        await db.commit()
+
+        await cursor.close()
+        await db.close()
+
+        return data
+
+
+DB = Database
+
+
+async def create_table() -> None:
+    db = DB()
+    cols = ["wallet", "bank"]  # You can add as many as columns in this !!!
+
+    await db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
+    for col in cols:
+        try:
+            await db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` BIGINT")
+        except aiosqlite.OperationalError:
+            pass
+
+
+async def open_bank(user: discord.Member) -> None:
+    await create_table()
+    columns = ["wallet", "bank"]  # You can add more Columns in it !
+
+    db = DB()
+    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is None:
-        await cursor.execute(f"INSERT INTO economy(userID) VALUES({user.id})")
-        await db.commit()
+        await db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(?)", (user.id,))
 
         for name in columns:
-            await cursor.execute(f"UPDATE economy SET {name} = 0 WHERE userID = {user.id}")
-        await db.commit()
+            await db.execute(f"UPDATE `{table_name}` SET `{name}` = ? WHERE userID = ?", (0, user.id))
 
-        await cursor.execute(f"UPDATE economy SET wallet = 5000 WHERE userID = {user.id}")
-        await db.commit()
-
-    await cursor.close()
-    await db.close()
+        await db.execute(f"UPDATE `{table_name}` SET `wallet` = ? WHERE userID = ?", (5000, user.id))
 
 
-async def get_bank_data(user):
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    users = await cursor.fetchone()
-
-    await cursor.close()
-    await db.close()
-
+async def get_bank_data(user: discord.Member) -> Optional[Any]:
+    users = await DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
-async def update_bank(user, amount=0, mode="wallet"):
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-
-    await cursor.execute(f"SELECT * FROM economy WHERE userID = {user.id}")
-    data = await cursor.fetchone()
+async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode: str = "wallet") -> Optional[Any]:
+    db = DB()
+    data = await db.execute(
+        f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     if data is not None:
-        await cursor.execute(f"UPDATE economy SET {mode} = {mode} + {amount} WHERE userID = {user.id}")
-        await db.commit()
+        await db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
 
-    await cursor.execute(f"SELECT {mode} FROM economy WHERE userID = {user.id}")
-    users = await cursor.fetchone()
-
-    await cursor.close()
-    await db.close()
-
+    users = await db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
-async def get_lb():
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-
-    await cursor.execute("SELECT userID, wallet + bank FROM economy ORDER BY wallet + bank DESC")
-    users = await cursor.fetchall()
-
-    await cursor.close()
-    await db.close()
-
+async def get_networth_lb() -> Any:
+    users = await DB().execute(
+        f"SELECT `userID`, `wallet` + `bank` FROM `{table_name}` ORDER BY `wallet` + `bank` DESC", fetch="all")
     return users
-

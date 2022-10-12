@@ -1,9 +1,19 @@
-# Join our discord server : https://discord.gg/GVMWx5EaAN
-# from coder: SKR PHOENIX - P.Sai Keerthan Reddy
+from bank_funcs import DB
 
-# make sure to read the instructions in README.md file !!!
+import aiosqlite
+import discord
 
-file_name = # enter your file name here !
+from typing import Union, Any, Optional
+
+__all__ = [
+    "shop_items",
+    "open_inv",
+    "get_inv_data",
+    "update_inv",
+    "change_inv"
+]
+
+table_name = "inventory"  # Enter the table name here (tip:- use only lowercase letters)
 
 shop_items = [
     {"name": "watch", "cost": 100, "id": 1, "info": "It's a watch"},
@@ -13,54 +23,54 @@ shop_items = [
 ]
 
 
-async def open_inv(user):
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
+async def create_table() -> None:
+    db = DB()
+    cols = [item["name"] for item in shop_items]
 
-    await cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    data = await cursor.fetchone()
+    await db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
+    for col in cols:
+        try:
+            await db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER")
+        except aiosqlite.OperationalError:
+            pass
+
+
+async def open_inv(user: discord.Member) -> None:
+    await create_table()
+
+    db = DB()
+    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is None:
-        await cursor.execute(f"INSERT INTO inventory(userID) VALUES({user.id})")
+        await db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(?)", (user.id,))
 
         for item in shop_items:
             item_name = item["name"]
-            await cursor.execute(f"UPDATE inventory SET `{item_name}` = 0 WHERE userID = {user.id}")
-
-        await db.commit()
-
-    await cursor.close()
-    await db.close()
+            await db.execute(f"UPDATE `{table_name}` SET `{item_name}` = ? WHERE userID = ?", (0, user.id,))
 
 
-async def get_inv_data(user):
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-
-    await cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    users = await cursor.fetchone()
-
-    await cursor.close()
-    await db.close()
-
+async def get_inv_data(user: discord.Member) -> Optional[Any]:
+    users = await DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
-async def update_inv(user, amount: int, mode):
-    db = await aiosqlite.connect(file_name)
-    cursor = await db.cursor()
-
-    await cursor.execute(f"SELECT * FROM inventory WHERE userID = {user.id}")
-    data = await cursor.fetchone()
+async def update_inv(user: discord.Member, amount: Union[float, int], mode: str) -> Optional[Any]:
+    db = DB()
+    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is not None:
-        await cursor.execute(f"UPDATE inventory SET `{mode}` = `{mode}` + {amount} WHERE userID = {user.id}")
-        await db.commit()
+        await db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
 
-    await cursor.execute(f"SELECT `{mode}` FROM inventory WHERE userID = {user.id}")
-    users = await cursor.fetchone()
+    users = await db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    return users
 
-    await cursor.close()
-    await db.close()
 
+async def change_inv(user: discord.Member, amount: Union[float, int, None], mode: str) -> Optional[Any]:
+    db = DB()
+    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+
+    if data is not None:
+        await db.execute(f"UPDATE `{table_name}` SET `{mode}` = ? WHERE userID = ?", (amount, user.id))
+
+    users = await db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
     return users

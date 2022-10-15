@@ -36,11 +36,12 @@ class Database:
         return None
 
     def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
-        with self._connect() as db:
-            with db.cursor() as cursor:
-                cursor.execute(query, values)
-                data = self._fetch(cursor, fetch)
-                db.commit()
+        db = self._connect()
+        cursor = db.cursor()
+        
+        cursor.execute(query, values)
+        data = self._fetch(cursor, fetch)
+        db.commit()
 
         return data
 

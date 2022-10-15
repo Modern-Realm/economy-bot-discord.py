@@ -43,6 +43,9 @@ class Database:
         data = self._fetch(cursor, fetch)
         db.commit()
 
+        cursor.close()
+        db.close()
+
         return data
 
 

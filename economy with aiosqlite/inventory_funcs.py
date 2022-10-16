@@ -30,7 +30,7 @@ async def create_table() -> None:
     await db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
     for col in cols:
         try:
-            await db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER")
+            await db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER DEFAULT 0")
         except aiosqlite.OperationalError:
             pass
 

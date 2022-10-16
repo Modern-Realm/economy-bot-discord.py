@@ -1,16 +1,12 @@
 from bank_funcs import *
 from inventory_funcs import *
 
-import os
 import discord
 
 from datetime import datetime
 from discord.ext import commands
-from dotenv import load_dotenv
 
-load_dotenv("C:/users/sai keerthan/PyEnvirons/variables.env")
-
-TOKEN = os.getenv("EMOJIS_BOT")  # Enter your Bot Token here !!!
+TOKEN = ...  # Enter your Bot Token here !!!
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix="$", intents=intents)
 

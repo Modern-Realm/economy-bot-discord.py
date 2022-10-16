@@ -38,7 +38,7 @@ class Database:
     def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
         db = self._connect()
         cursor = db.cursor()
-        
+
         cursor.execute(query, values)
         data = self._fetch(cursor, fetch)
         db.commit()

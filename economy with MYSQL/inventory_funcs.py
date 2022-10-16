@@ -30,7 +30,7 @@ async def create_table() -> None:
     db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
     for col in cols:
         try:
-            db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER")
+            db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER DEFAULT 0")
         except mysql.errors.ProgrammingError:
             pass
 

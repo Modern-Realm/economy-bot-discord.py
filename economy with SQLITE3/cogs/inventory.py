@@ -72,5 +72,11 @@ class Inventory(commands.Cog):
                 return await ctx.send(f"{user.mention} you sold {item_name} for {cost:,}")
 
 
+# if you are using 'discord.py >=v2.0' remove below code
 def setup(client):
     client.add_cog(Inventory(client))
+
+
+# if you are using 'discord.py >=v2.0' uncomment(add) below code
+# async def setup(client):
+#     await client.add_cog(Inventory(client))

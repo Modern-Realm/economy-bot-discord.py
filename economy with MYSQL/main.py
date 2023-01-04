@@ -16,12 +16,12 @@ async def on_ready():
         activity=discord.Game(f"{Auth.command_prefix}help")
     )
 
-    # # if you are using 'discord.py' remove below code
+    # if you are using 'discord.py >=v2.0' remove below code
     for file in os.listdir("./cogs"):
         if file.endswith(".py"):
             client.load_extension(f"cogs.{file[:-3]}")
 
-    # if you are using 'discord.py' uncomment(add) below code
+    # if you are using 'discord.py >=v2.0' uncomment(add) below code
     # for file in os.listdir("./cogs"):
     #     if file.endswith(".py"):
     #         await client.load_extension(f"cogs.{file[:-3]}")

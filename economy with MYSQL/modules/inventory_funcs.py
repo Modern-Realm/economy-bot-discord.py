@@ -1,4 +1,4 @@
-from bank_funcs import DB
+from modules.bank_funcs import DB
 
 import discord
 import mysql.connector as mysql

@@ -1,3 +1,5 @@
+from config import Auth
+
 import aiosqlite
 import discord
 
@@ -11,14 +13,13 @@ __all__ = [
     "get_networth_lb"
 ]
 
-filename = ...  # Enter your file_name here , with (.db, .sql, .sqlite3) suffix , Example: economy.db
-table_name = ...  # Enter the table name here (tip:- use only lowercase letters)
+table_name = "bank"  # Enter the table name here (tip:- use only lowercase letters)
 
 
 class Database:
     @staticmethod
     async def _connect():
-        return await aiosqlite.connect(filename)
+        return await aiosqlite.connect(Auth.filename)
 
     @staticmethod
     async def _fetch(cursor, mode) -> Optional[Any]:

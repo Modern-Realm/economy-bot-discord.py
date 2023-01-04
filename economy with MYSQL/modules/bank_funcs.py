@@ -1,3 +1,5 @@
+from config import Auth
+
 import mysql.connector as mysql
 import discord
 
@@ -11,18 +13,16 @@ __all__ = [
     "get_networth_lb"
 ]
 
-DB_HOST = "localhost"  # or your selected port/id address
-DB_USER = ...  # enter the username you created or root user
-DB_PASSWD = ...  # enter the password you have given for user or root user
-DB_NAME = ...  # enter the database name which you created !
-
-table_name = ...  # Enter the table name here (tip:- use only lowercase letters)
+table_name = "bank"
 
 
 class Database:
     @staticmethod
     def _connect():
-        return mysql.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWD, database=DB_NAME)
+        return mysql.connect(
+            host=Auth.DB_HOST, database=Auth.DB_NAME,
+            user=Auth.DB_USER, passwd=Auth.DB_PASSWD,
+        )
 
     @staticmethod
     def _fetch(cursor, mode) -> Optional[Any]:

@@ -1,6 +1,6 @@
 import sqlite3
 
-from bank_funcs import DB
+from modules.bank_funcs import DB
 
 import discord
 

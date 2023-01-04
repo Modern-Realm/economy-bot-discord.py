@@ -48,7 +48,7 @@ class Economy(commands.Cog):
         user = ctx.author
         if isinstance(error, commands.CommandOnCooldown):
             time_left = str(timedelta(seconds=error.retry_after))
-            return await ctx.send(f"{user.mention} you can on cooldown. Try after `{time_left}`")
+            return await ctx.send(f"{user.mention} you are on cooldown. Try after `{time_left}`")
 
 
 def setup(client):

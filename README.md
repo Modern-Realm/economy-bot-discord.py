@@ -38,7 +38,7 @@
 
 **`$`** is the default **command prefix**
 
-### • <u>Bank commands</u>
+### • Bank commands
 
 |    Name     | Aliases |  Args  |      Usage       |
 |:-----------:|:-------:|:------:|:----------------:|
@@ -47,7 +47,7 @@
 |  withdraw   |  with   | amount | `$with <amount>` |
 | leaderboard |   lb    |  None  |      `$lb `      |
 
-### • <u>Shop commands</u>
+### • Shop commands
 
 |   Name    | Aliases |   Args    |        Usage         |
 |:---------:|:-------:|:---------:|:--------------------:|
@@ -57,7 +57,7 @@
 |   sell    |   ---   | item_name | `$sell <item name>`  |
 | inventory |   inv   |   None    |        `$inv`        |
 
-### • <u>Economy commands</u>
+### • Economy commands
 
 |  Name   | Aliases | Args |   Usage    | Cooldown (in days) |
 |:-------:|:-------:|:----:|:----------:|:------------------:|

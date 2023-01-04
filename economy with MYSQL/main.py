@@ -8,9 +8,9 @@ from discord.ext import commands
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix=Auth.command_prefix, intents=intents, auto_sync_commands=True)
 
-client.load_extensions(*(
-    f"cogs.{file[:-3]}" for file in os.listdir("./cogs") if file.endswith(".py")
-))
+for file in os.listdir("./cogs"):
+    if file.endswith(".py"):
+        client.load_extension(f"cogs.{file[:-3]}")
 
 
 @client.event

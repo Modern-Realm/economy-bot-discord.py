@@ -30,7 +30,7 @@
 
 #### • [Economy with AioSQLite](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20aiosqlite)
 
-#### • [Economy with MongoDB](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20mongoDB) `Code will be updated soon`
+#### • [Economy with MongoDB](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20mongoDB)
 
 <hr/>
 

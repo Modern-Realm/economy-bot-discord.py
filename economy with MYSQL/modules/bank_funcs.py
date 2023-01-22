@@ -3,6 +3,7 @@ from config import Auth
 import mysql.connector as mysql
 import discord
 
+from mysql.connector import MySQLConnection, errors
 from typing import Tuple, Any, Optional, Union
 
 __all__ = [
@@ -13,19 +14,30 @@ __all__ = [
     "get_networth_lb"
 ]
 
-table_name = "bank"
+TABLE_NAME = "bank"
+columns = ["wallet", "bank"]  # You can add more Columns in it !
 
 
 class Database:
-    @staticmethod
-    def _connect():
-        return mysql.connect(
-            host=Auth.DB_HOST, database=Auth.DB_NAME,
-            user=Auth.DB_USER, passwd=Auth.DB_PASSWD,
-        )
+    def __init__(self):
+        self.conn: Optional[MySQLConnection] = None
+
+    async def connect(self):
+        try:
+            self.conn = mysql.connect(
+                host=Auth.DB_HOST, port=Auth.DB_PORT,
+                database=Auth.DB_NAME, user=Auth.DB_USER, passwd=Auth.DB_PASSWD,
+            )
+        except errors.Error:
+            self.conn = None
+        return self
+
+    @property
+    def is_connected(self) -> bool:
+        return False if self.conn is None else True
 
     @staticmethod
-    def _fetch(cursor, mode) -> Optional[Any]:
+    async def _fetch(cursor, mode) -> Optional[Any]:
         if mode == "one":
             return cursor.fetchone()
         if mode == "many":
@@ -35,68 +47,57 @@ class Database:
 
         return None
 
-    def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
-        db = self._connect()
-        cursor = db.cursor()
+    async def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
+        cursor = self.conn.cursor()
 
         cursor.execute(query, values)
-        data = self._fetch(cursor, fetch)
-        db.commit()
+        data = await self._fetch(cursor, fetch)
+        self.conn.commit()
 
         cursor.close()
-        db.close()
-
         return data
 
 
-DB = Database
+DB = Database()
 
 
 async def create_table() -> None:
-    db = DB()
-    cols = ["wallet", "bank"]  # You can add as many as columns in this !!!
-
-    db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
-    for col in cols:
+    await DB.execute(f"CREATE TABLE IF NOT EXISTS `{TABLE_NAME}`(userID BIGINT)")
+    for col in columns:
         try:
-            db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` BIGINT")
+            await DB.execute(f"ALTER TABLE `{TABLE_NAME}` ADD COLUMN `{col}` BIGINT")
         except mysql.errors.ProgrammingError:
             pass
 
 
 async def open_bank(user: discord.Member) -> None:
-    await create_table()
-    columns = ["wallet", "bank"]  # You can add more Columns in it !
-
-    db = DB()
-    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = %s", (user.id,), fetch="one")
-
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one")
     if data is None:
-        db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(%s)", (user.id,))
+        await DB.execute(f"INSERT INTO `{TABLE_NAME}`(userID) VALUES(%s)", (user.id,))
 
         for name in columns:
-            db.execute(f"UPDATE `{table_name}` SET `{name}` = %s WHERE userID = %s", (0, user.id))
+            await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{name}` = %s WHERE userID = %s", (0, user.id))
 
-        db.execute(f"UPDATE `{table_name}` SET `wallet` = %s WHERE userID = %s", (5000, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `wallet` = %s WHERE userID = %s", (5000, user.id))
 
 
 async def get_bank_data(user: discord.Member) -> Optional[Any]:
-    users = DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = %s", (user.id,), fetch="one")
-    return users
+    return await DB.execute(
+        f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,),
+        fetch="one")
 
 
 async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode: str = "wallet") -> Optional[Any]:
-    db = DB()
-    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = %s", (user.id,), fetch="one")
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one")
     if data is not None:
-        db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + %s WHERE userID = %s",
-                   (amount, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{mode}` = `{mode}` + %s WHERE userID = %s",
+                         (amount, user.id))
 
-    users = db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = %s", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one")
     return users
 
 
 async def get_networth_lb() -> Any:
-    users = DB().execute(f"SELECT `userID`, `wallet` + `bank` FROM `{table_name}` ORDER BY `wallet` + `bank` DESC",
-                         fetch="all")
-    return users
+    return await DB.execute(
+        f"SELECT `userID`, `wallet` + `bank` FROM `{TABLE_NAME}` ORDER BY `wallet` + `bank` DESC",
+        fetch="all")

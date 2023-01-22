@@ -13,16 +13,28 @@ __all__ = [
     "get_networth_lb"
 ]
 
-table_name = "economy"
+TABLE_NAME = "economy"
+columns = ["wallet", "bank"]  # You can add more Columns in it !
 
 
 class Database:
-    @staticmethod
-    def _connect():
-        return sqlite3.connect(Auth.filename)
+    def __init__(self):
+        self.conn: Optional[sqlite3.Connection] = None
+
+    async def connect(self):
+        try:
+            self.conn = sqlite3.connect(Auth.FILENAME)
+        except sqlite3.Error:
+            pass
+
+        return self
+
+    @property
+    def is_connected(self) -> bool:
+        return False if self.conn is None else True
 
     @staticmethod
-    def _fetch(cursor, mode) -> Optional[Any]:
+    async def _fetch(cursor, mode) -> Optional[Any]:
         if mode == "one":
             return cursor.fetchone()
         if mode == "many":
@@ -32,68 +44,57 @@ class Database:
 
         return None
 
-    def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
-        db = self._connect()
-        cursor = db.cursor()
+    async def execute(self, query: str, values: Tuple = (), *, fetch: str = None) -> Optional[Any]:
+        cursor = self.conn.cursor()
 
         cursor.execute(query, values)
-        data = self._fetch(cursor, fetch)
-        db.commit()
+        data = await self._fetch(cursor, fetch)
+        self.conn.commit()
 
         cursor.close()
-        db.close()
-
         return data
 
 
-DB = Database
+DB = Database()
 
 
 async def create_table() -> None:
-    db = DB()
-    cols = ["wallet", "bank"]  # You can add as many as columns in this !!!
-
-    db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
-    for col in cols:
+    await DB.execute(f"CREATE TABLE IF NOT EXISTS `{TABLE_NAME}`(userID BIGINT)")
+    for col in columns:
         try:
-            db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` BIGINT")
+            await DB.execute(f"ALTER TABLE `{TABLE_NAME}` ADD COLUMN `{col}` BIGINT")
         except sqlite3.OperationalError:
             pass
 
 
 async def open_bank(user: discord.Member) -> None:
-    await create_table()
-    columns = ["wallet", "bank"]  # You can add more Columns in it !
-
-    db = DB()
-    data = db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
 
     if data is None:
-        db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(?)", (user.id,))
+        await DB.execute(f"INSERT INTO `{TABLE_NAME}`(userID) VALUES(?)", (user.id,))
 
         for name in columns:
-            db.execute(f"UPDATE `{table_name}` SET `{name}` = ? WHERE userID = ?", (0, user.id))
+            await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{name}` = ? WHERE userID = ?", (0, user.id))
 
-        db.execute(f"UPDATE `{table_name}` SET `wallet` = ? WHERE userID = ?", (5000, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `wallet` = ? WHERE userID = ?", (5000, user.id))
 
 
 async def get_bank_data(user: discord.Member) -> Optional[Any]:
-    users = DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
 async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode: str = "wallet") -> Optional[Any]:
-    db = DB()
-    data = db.execute(
-        f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    data = await DB.execute(
+        f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     if data is not None:
-        db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
 
-    users = db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
 async def get_networth_lb() -> Any:
-    users = DB().execute(f"SELECT `userID`, `wallet` + `bank` FROM `{table_name}` ORDER BY `wallet` + `bank` DESC",
-                         fetch="all")
+    users = await DB.execute(f"SELECT `userID`, `wallet` + `bank` FROM `{TABLE_NAME}` ORDER BY `wallet` + `bank` DESC",
+                             fetch="all")
     return users

@@ -9,8 +9,5 @@ class Auth:
     TOKEN = getenv("TOKEN")
     COMMAND_PREFIX = getenv("COMMAND_PREFIX")
 
-    DB_HOST = getenv("DB_HOST")
-    DB_PORT = getenv("DB_PORT")
-    DB_USER = getenv("DB_USER")
-    DB_PASSWD = getenv("DB_PASSWD")
+    CLUSTER_AUTH_URL = getenv("CLUSTER_AUTH_URL")
     DB_NAME = getenv("DB_NAME")

@@ -13,7 +13,7 @@ __all__ = [
     "change_inv"
 ]
 
-table_name = "inventory"  # Enter the table name here (tip:- use only lowercase letters)
+TABLE_NAME = "inventory"  # Enter the table name here (tip:- use only lowercase letters)
 
 shop_items = [
     {"name": "watch", "cost": 100, "id": 1, "info": "It's a watch"},
@@ -21,56 +21,46 @@ shop_items = [
     {"name": "laptop", "cost": 10000, "id": 3, "info": "It's a laptop"}
     # You can add your items here ...
 ]
+item_names = [item["name"] for item in shop_items]
 
 
 async def create_table() -> None:
-    db = DB()
-    cols = [item["name"] for item in shop_items]
-
-    await db.execute(f"CREATE TABLE IF NOT EXISTS `{table_name}`(userID BIGINT)")
-    for col in cols:
+    await DB.execute(f"CREATE TABLE IF NOT EXISTS `{TABLE_NAME}`(userID BIGINT)")
+    for col in item_names:
         try:
-            await db.execute(f"ALTER TABLE `{table_name}` ADD COLUMN `{col}` INTEGER DEFAULT 0")
+            await DB.execute(f"ALTER TABLE `{TABLE_NAME}` ADD COLUMN `{col}` INTEGER DEFAULT 0")
         except aiosqlite.OperationalError:
             pass
 
 
 async def open_inv(user: discord.Member) -> None:
-    await create_table()
-
-    db = DB()
-    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
-
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     if data is None:
-        await db.execute(f"INSERT INTO `{table_name}`(userID) VALUES(?)", (user.id,))
+        await DB.execute(f"INSERT INTO `{TABLE_NAME}`(userID) VALUES(?)", (user.id,))
 
         for item in shop_items:
             item_name = item["name"]
-            await db.execute(f"UPDATE `{table_name}` SET `{item_name}` = ? WHERE userID = ?", (0, user.id,))
+            await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{item_name}` = ? WHERE userID = ?", (0, user.id,))
 
 
 async def get_inv_data(user: discord.Member) -> Optional[Any]:
-    users = await DB().execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
 async def update_inv(user: discord.Member, amount: Union[float, int], mode: str) -> Optional[Any]:
-    db = DB()
-    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
-
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     if data is not None:
-        await db.execute(f"UPDATE `{table_name}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{mode}` = `{mode}` + ? WHERE userID = ?", (amount, user.id))
 
-    users = await db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users
 
 
 async def change_inv(user: discord.Member, amount: Union[float, int, None], mode: str) -> Optional[Any]:
-    db = DB()
-    data = await db.execute(f"SELECT * FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
-
+    data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     if data is not None:
-        await db.execute(f"UPDATE `{table_name}` SET `{mode}` = ? WHERE userID = ?", (amount, user.id))
+        await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{mode}` = ? WHERE userID = ?", (amount, user.id))
 
-    users = await db.execute(f"SELECT `{mode}` FROM `{table_name}` WHERE userID = ?", (user.id,), fetch="one")
+    users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users

@@ -3,13 +3,13 @@
 # clone the repository
 
 ```sh
-git clone https://github.com/Modern-Realm/economy-bot-discord.py .
+git clone https://github.com/Modern-Realm/economy-bot-discord.py
 ```
 
 # Setting up the working directory & installing packages
 
 ```sh
-cd "economy with aiosqlite"
+cd "economy-bot-discord.py/economy with aiosqlite"
 pip install -r requirements.txt
 ```
 

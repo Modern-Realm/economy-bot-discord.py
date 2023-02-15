@@ -1,4 +1,4 @@
-# Quickstart
+# 📙Quickstart
 
 # clone the repository
 
@@ -13,7 +13,7 @@ cd "economy with MYSQL"
 pip install -r requirements.txt
 ```
 
-**Note:** make sure to install **any one** of these `(discord.py, py-cord or nextcord)` 
+**Note:** make sure to install **any one** of these package`(discord.py, py-cord or nextcord)` 
 
 # Provide the secret keys/values in `.env` file
 

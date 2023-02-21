@@ -30,7 +30,7 @@
 
 <br/>
 
-To create a Discord bot using **nodeJS**, go to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.js)
+To create a Discord bot using **discord.js**, go to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.js)
 
 <hr/>
 

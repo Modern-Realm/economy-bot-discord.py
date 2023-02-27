@@ -9,7 +9,7 @@ git clone --single-branch -b alpha https://github.com/Modern-Realm/economy-bot-d
 # Setting up the working directory & installing packages
 
 ```sh
-cd "economy-bot-discord.py/economy with SQLITE3"
+cd "economy-bot-discord.py/economy with mongoDB"
 pip install -r requirements.txt
 ```
 

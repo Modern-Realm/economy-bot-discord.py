@@ -92,7 +92,7 @@ class MainBank(commands.Cog):
                 break
 
             member_name = self.client.get_user(member[0])
-            member_amt = int(member[1] + member[2])
+            member_amt = member[1]
 
             if index == 1:
                 msg1 = f"**🥇 `{member_name}` -- {member_amt}**"
@@ -111,7 +111,7 @@ class MainBank(commands.Cog):
         msg = "\n".join(data)
 
         em = discord.Embed(
-            title=f"Top {index} Richest Users - Leaderboard",
+            title=f"Top {index - 1} Richest Users - Leaderboard",
             description=f"It's Based on Net Worth (wallet + bank) of Global Users\n\n{msg}",
             color=discord.Color(0x00ff00),
             timestamp=datetime.utcnow()
@@ -120,10 +120,9 @@ class MainBank(commands.Cog):
         await ctx.send(embed=em)
 
 
-# if you are using 'discord.py >=v2.0' remove below code
+# if you are using 'discord.py >=v2.0' comment(remove) below code
 def setup(client):
     client.add_cog(MainBank(client))
-
 
 # if you are using 'discord.py >=v2.0' uncomment(add) below code
 # async def setup(client):

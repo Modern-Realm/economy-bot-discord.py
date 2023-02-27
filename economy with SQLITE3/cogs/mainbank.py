@@ -120,7 +120,7 @@ class MainBank(commands.Cog):
         await ctx.send(embed=em)
 
 
-# if you are using 'discord.py >=v2.0' remove below code
+# if you are using 'discord.py >=v2.0' comment(remove) below code
 def setup(client):
     client.add_cog(MainBank(client))
 

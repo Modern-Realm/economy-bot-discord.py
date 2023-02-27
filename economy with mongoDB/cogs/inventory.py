@@ -23,10 +23,10 @@ class Inventory(commands.Cog):
             item_id = item["id"]
 
             data = await update_inv(user, 0, name)
-            if data >= 1:
+            if data[0] >= 1:
                 x += 1
                 em.add_field(
-                    name=f"{name.upper()} - {data}", value=f"ID: {item_id}", inline=False)
+                    name=f"{name.upper()} - {data[0]}", value=f"ID: {item_id}", inline=False)
 
         em.set_author(name=f"{user.name}'s Inventory", icon_url=user.avatar.url)
         if x == 1:
@@ -63,7 +63,7 @@ class Inventory(commands.Cog):
             if item_name.lower() == item["name"].lower():
                 cost = int(round(item["cost"] / 2, 0))
                 quantity = await update_inv(user, 0, item["name"])
-                if quantity < 1:
+                if quantity[0] < 1:
                     return await ctx.send(f"{user.mention} you don't have {item['name']} in your inventory")
 
                 await open_inv(user)
@@ -72,10 +72,9 @@ class Inventory(commands.Cog):
                 return await ctx.send(f"{user.mention} you sold {item_name} for {cost:,}")
 
 
-# if you are using 'discord.py >=v2.0' remove below code
+# if you are using 'discord.py >=v2.0' comment(remove) below code
 def setup(client):
     client.add_cog(Inventory(client))
-
 
 # if you are using 'discord.py >=v2.0' uncomment(add) below code
 # async def setup(client):

@@ -61,10 +61,9 @@ class Shop(commands.Cog):
                 await ctx.send(embed=em)
 
 
-# if you are using 'discord.py >=v2.0' remove below code
+# if you are using 'discord.py >=v2.0' comment(remove) below code
 def setup(client):
     client.add_cog(Shop(client))
-
 
 # if you are using 'discord.py >=v2.0' uncomment(add) below code
 # async def setup(client):

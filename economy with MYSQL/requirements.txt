@@ -1,2 +1,3 @@
 python-dotenv>=0.21.0
-mysql-connector-python
+mysql-connector-python>=8.0.32
+numpy>=1.24.2

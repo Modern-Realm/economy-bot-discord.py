@@ -1,8 +1,7 @@
 from modules.bank_funcs import *
 
-import random
+from numpy import random
 
-from datetime import timedelta
 from discord.ext import commands
 
 
@@ -19,7 +18,7 @@ class Economy(commands.Cog):
 
         rand_amt = random.randint(3000, 5000)
         await update_bank(user, +rand_amt)
-        await ctx.send(f"{user.mention} your daily pocket money is {rand_amt:,}")
+        await ctx.reply(f"Your daily pocket money is {rand_amt:,}", mention_author=False)
 
     @commands.cooldown(1, 7 * 24 * 60 * 60)
     @commands.command()
@@ -30,7 +29,7 @@ class Economy(commands.Cog):
 
         rand_amt = random.randint(7000, 10000)
         await update_bank(user, +rand_amt)
-        await ctx.send(f"{user.mention} your weekly pocket money is {rand_amt:,}")
+        await ctx.reply(f"Your weekly pocket money is {rand_amt:,}", mention_author=False)
 
     @commands.cooldown(1, 30 * 24 * 60 * 60)
     @commands.command()
@@ -41,14 +40,7 @@ class Economy(commands.Cog):
 
         rand_amt = random.randint(30000, 50000)
         await update_bank(user, +rand_amt)
-        await ctx.send(f"{user.mention} your monthly pocket money is {rand_amt:,}")
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        user = ctx.author
-        if isinstance(error, commands.CommandOnCooldown):
-            time_left = str(timedelta(seconds=error.retry_after))
-            return await ctx.send(f"{user.mention} you are on cooldown. Try after `{time_left}`")
+        await ctx.reply(f"Your monthly pocket money is {rand_amt:,}", mention_author=False)
 
 
 # if you are not using 'discord.py >=v2.0' uncomment(add) below code

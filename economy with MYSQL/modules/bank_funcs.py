@@ -34,7 +34,7 @@ class Database:
 
     @property
     def is_connected(self) -> bool:
-        return False if self.conn is None else True
+        return self.conn is not None
 
     @staticmethod
     async def _fetch(cursor, mode) -> Optional[Any]:

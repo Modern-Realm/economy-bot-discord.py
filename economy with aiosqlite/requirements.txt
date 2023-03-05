@@ -1,2 +1,3 @@
 python-dotenv>=0.21.0
-aiosqlite
+aiosqlite>=0.18.0
+numpy>=1.24.2

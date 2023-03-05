@@ -9,7 +9,7 @@ class Shop(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @commands.group()
+    @commands.group(invoke_without_command=True)
     @commands.guild_only()
     async def shop(self, ctx):
         user = ctx.author
@@ -31,9 +31,9 @@ class Shop(commands.Cog):
                 em.add_field(name=f"{name.upper()} -- {cost}",
                              value=f"{item_info}\nID: `{item_id}`", inline=False)
 
-        await ctx.send(embed=em)
+        await ctx.reply(embed=em, mention_author=False)
 
-    @shop.command()
+    @shop.command(usage="<item_name*: string>")
     @commands.guild_only()
     async def info(self, ctx, *, item_name: str):
         user = ctx.author
@@ -41,10 +41,6 @@ class Shop(commands.Cog):
             name = item["name"]
             cost = item["cost"]
             item_info = item["info"]
-
-            if name != item_name:
-                await ctx.send(f"{user.mention} there's no item named '{item_name}'")
-                return
 
             if name == item_name:
                 em = discord.Embed(
@@ -58,7 +54,9 @@ class Shop(commands.Cog):
                 em.add_field(name="Selling price",
                              value=str(sell_amt), inline=False)
 
-                await ctx.send(embed=em)
+                return await ctx.reply(embed=em, mention_author=False)
+
+        await ctx.reply(f"There's no item named '{item_name}'", mention_author=False)
 
 
 # if you are not using 'discord.py >=v2.0' uncomment(add) below code

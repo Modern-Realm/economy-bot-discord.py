@@ -1,5 +1,5 @@
-from config import Auth
 from modules import bank_funcs, inventory_funcs
+from config import Auth
 
 import os
 import discord

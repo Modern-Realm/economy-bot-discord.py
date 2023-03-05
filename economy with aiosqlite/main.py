@@ -1,5 +1,5 @@
-from config import Auth
 from modules import bank_funcs, inventory_funcs
+from config import Auth
 
 import os
 import discord
@@ -33,7 +33,7 @@ async def on_ready():
 
     await bank_funcs.create_table()
     await inventory_funcs.create_table()
-    print("Created tables successfully")
+    print("Created/modified tables successfully")
 
     print(f"{client.user.name} is online !")
 

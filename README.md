@@ -30,7 +30,8 @@
 
 <br/>
 
-To create a Discord bot using **discord.js**, go to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.js)
+To create a Discord bot using **discord.js**, go
+to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.js)
 
 <hr/>
 
@@ -40,12 +41,13 @@ To create a Discord bot using **discord.js**, go to [economy-bot-discord.js](htt
 
 ### • Bank commands
 
-|    Name     | Aliases |  Args  |      Usage       |
-|:-----------:|:-------:|:------:|:----------------:|
-|   balance   |   bal   |  None  |      `$bal`      |
-|   deposit   |   dep   | amount | `$dep <amount>`  |
-|  withdraw   |  with   | amount | `$with <amount>` |
-| leaderboard |   lb    |  None  |      `$lb `      |
+|                             Name                             | Aliases |      Args      |           Usage           |
+|:------------------------------------------------------------:|:-------:|:--------------:|:-------------------------:|
+|                           balance                            |   bal   |     member     | `$bal <member: optional>` |
+|                           deposit                            |   dep   |     amount     |      `$dep <amount>`      |
+|                           withdraw                           |  with   |     amount     |     `$with <amount>`      |
+| send ![Generic badge](https://img.shields.io/badge/new-gold) |   ---   | member, amount | `$send <member> <amount>` |
+|                         leaderboard                          |   lb    |      None      |          `$lb `           |
 
 ### • Shop commands
 
@@ -64,6 +66,14 @@ To create a Discord bot using **discord.js**, go to [economy-bot-discord.js](htt
 |  daily  |   ---   | None |  `$daily`  |         1          |
 | weekly  |   ---   | None | `$weekly`  |         7          |
 | monthly |   ---   | None | `$monthly` |         30         |
+
+### • Fun commands ![Generic badge](https://img.shields.io/badge/new-gold)
+
+|   Name    |   Aliases    |      Args      |                Usage                |
+|:---------:|:------------:|:--------------:|:-----------------------------------:|
+| coin_flip | cf, coinflip | bet_on, amount |       `$cf <bet_on> <amount>`       |
+|   slots   |     ---      |     amount     |          `$slots <amount>`          |
+|   dice    |     ---      | amount, bet_on | `$dice <amount> <bet_on: optional>` |
 
 <hr/>
 

@@ -1,13 +1,13 @@
 from modules import bank_funcs, inventory_funcs
 from config import Auth
 
-import discord
 import os
+import discord
 
 from discord.ext import commands
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix=Auth.COMMAND_PREFIX, intents=intents)
+client = commands.Bot(command_prefix=Auth.COMMAND_PREFIX, intents=intents, auto_sync_commands=True)
 
 
 @client.event
@@ -33,7 +33,7 @@ async def on_ready():
 
     await bank_funcs.create_table()
     await inventory_funcs.create_table()
-    print("Created tables successfully")
+    print("Created/modified tables successfully")
 
     print(f"{client.user.name} is online !")
 

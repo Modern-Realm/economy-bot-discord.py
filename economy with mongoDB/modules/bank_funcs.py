@@ -41,7 +41,7 @@ class DataBase:
 
     @property
     def is_connected(self) -> bool:
-        return False if self.cluster is None else True
+        return self.cluster is not None
 
     def cursor(self, table_name: str) -> Collection[Mapping[str, Any]]:
         return self.db[table_name]

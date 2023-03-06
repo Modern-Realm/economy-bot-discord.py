@@ -62,7 +62,7 @@ class Fun(commands.Cog):
                         f"```"
         )
         msg = await ctx.reply(content="spinning the slot", embed=em, mention_author=False)
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
 
         total = len(slot1)
         if total % 2 == 0:  # if even
@@ -86,10 +86,17 @@ class Fun(commands.Cog):
         )
 
         slot = result[mid]
-        if slot.count(slot[0]) == 3:
+        s1 = slot[0]
+        s2 = slot[1]
+        s3 = slot[2]
+        if s1 == s2 == s3:
             reward = round(amount / 2)
             await update_bank(user, +reward)
             content = f"{user.mention} Jackpot! you won {amount + reward:,}"
+        elif s1 == s2 or s2 == s3 or s1 == s3:
+            reward = round(amount / 4)
+            await update_bank(user, +reward)
+            content = f"{user.mention} GG! you only won {amount + reward:,}"
         else:
             await update_bank(user, -amount)
             content = f"{user.mention} You lost {amount:,}"

@@ -51,13 +51,13 @@ to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.
 
 ### • Shop commands
 
-|   Name    | Aliases |   Args    |        Usage         |
-|:---------:|:-------:|:---------:|:--------------------:|
-|   shop    |   ---   |   None    |      ` $shop `       |
-| shop info |   ---   | item_name | ` $shop <item name>` |
-|    buy    |   ---   | item_name |  `$buy <item name>`  |
-|   sell    |   ---   | item_name | `$sell <item name>`  |
-| inventory |   inv   |   None    |        `$inv`        |
+|   Name    | Aliases |   Args    |           Usage           |
+|:---------:|:-------:|:---------:|:-------------------------:|
+|   shop    |   ---   |   None    |         ` $shop `         |
+| shop info |   ---   | item_name |   ` $shop <item name>`    |
+|    buy    |   ---   | item_name |    `$buy <item name>`     |
+|   sell    |   ---   | item_name |    `$sell <item name>`    |
+| inventory |   inv   |  member   | `$inv <member: optional>` |
 
 ### • Economy commands
 

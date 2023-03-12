@@ -35,7 +35,7 @@ class Events(commands.Cog):
                     if param.empty:
                         log = f"<{param.name}*>"
                     else:
-                        log = f"{param.name}>"
+                        log = f"<{param.name}>"
                     params.append(log)
 
                 usage += ' '.join(params)

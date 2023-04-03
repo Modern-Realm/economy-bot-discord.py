@@ -29,9 +29,6 @@ python main.py
 
 # Note: for discord.py users
 
-If you are using discord.py then you need to make some changes in the code,
-the instructions are given in comments in `main.py` file and all `*.py` files in `cogs` folder
-
 **You can just clone [`branch:alpha`](https://github.com/Modern-Realm/economy-bot-discord.py/tree/alpha)**
 
 ```sh

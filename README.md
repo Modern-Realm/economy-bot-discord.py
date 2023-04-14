@@ -35,6 +35,27 @@ to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.
 
 <hr/>
 
+## Thanking JetBrains for Their Support and Assistance
+
+<div align="center">
+
+<img width="90px" height="80px" alt="JetBrains Logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png"/>
+
+<a href="https://jb.gg/OpenSourceSupport">jetbrains.com</a>
+Once again thank you 💝 for providing me free OSS License.
+
+These IDE(s) made things a lot easier for us:
+
+• <img height="14px" width="16px" alt="WebStorm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/WebStorm_icon.png"/>
+**WebStorm** - The smartest JavaScript IDE
+
+• <img height="14px" width="16px" alt="PyCharm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/PyCharm_icon.png">
+**PyCharm Professional** - Python IDE for professional developers
+
+</div>
+
+<hr/>
+
 ## List of Bot Commands
 
 **`$`** is the default **command prefix**
@@ -67,7 +88,15 @@ to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.
 | weekly  |   ---   | None | `$weekly`  |         7          |
 | monthly |   ---   | None | `$monthly` |         30         |
 
-### • Fun commands ![Generic badge](https://img.shields.io/badge/new-gold)
+### • Admin commands ![Generic badge](https://img.shields.io/badge/new-gold)
+
+|     Name     | Aliases  |      Args      |             Usage             |
+|:------------:|:--------:|:--------------:|:-----------------------------:|
+|  add_money   | addmoney | member, amount | `$addmoney <member> <amount>` |
+| remove_money | remoney  | member, amount | `$remoney <member> <amount>`  |
+|  reset_user  |   None   |     member     |    `$reset_user <member>`     |
+
+### • Fun commands
 
 |   Name    |   Aliases    |      Args      |                Usage                |
 |:---------:|:------------:|:--------------:|:-----------------------------------:|
@@ -76,27 +105,6 @@ to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.
 |   dice    |     ---      | amount, bet_on | `$dice <amount> <bet_on: optional>` |
 
 New bot commands will be added shortly ...
-
-<hr/>
-
-## Thanking JetBrains for Their Support and Assistance
-
-<div align="center">
-
-<img width="90px" height="80px" alt="JetBrains Logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png"/>
-
-<a href="https://jb.gg/OpenSourceSupport">jetbrains.com</a>
-Once again thank you 💝 for providing me free OSS License.
-
-These IDE(s) made things a lot easier for us:
-
-• <img height="14px" width="16px" alt="WebStorm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/WebStorm_icon.png"/>
-**WebStorm** - The smartest JavaScript IDE
-
-• <img height="14px" width="16px" alt="PyCharm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/PyCharm_icon.png">
-**PyCharm Professional** - Python IDE for professional developers
-
-</div>
 
 <hr/>
 

@@ -16,6 +16,12 @@ class Events(commands.Cog):
         if isinstance(error, commands.errors.CommandNotFound):
             return
 
+        if isinstance(error, commands.errors.MissingPermissions) or isinstance(error, commands.errors.NotOwner):
+            return await ctx.reply("You cannot use this command")
+
+        if isinstance(error, commands.errors.MemberNotFound):
+            return await ctx.reply("the member you provided is incorrect or not found")
+
         if isinstance(error, commands.errors.MissingRequiredArgument):
             cmd_parent = ctx.command.parent
             if cmd_parent is not None:

@@ -88,7 +88,7 @@ New bot commands will be added shortly ...
 <a href="https://jb.gg/OpenSourceSupport">jetbrains.com</a>
 Once again thank you 💝 for providing me free OSS License.
 
-These IDE(S) made things a lot easier for us:
+These IDE(s) made things a lot easier for us:
 
 • <img height="14px" width="16px" alt="WebStorm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/WebStorm_icon.png"/>
 **WebStorm** - The smartest JavaScript IDE

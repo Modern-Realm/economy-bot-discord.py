@@ -11,6 +11,7 @@ __all__ = [
     "open_bank",
     "get_bank_data",
     "update_bank",
+    "reset_bank",
     "get_networth_lb"
 ]
 
@@ -65,7 +66,7 @@ async def create_table() -> None:
     await DB.execute(f"CREATE TABLE IF NOT EXISTS `{TABLE_NAME}`(userID BIGINT)")
     for col in columns:
         try:
-            await DB.execute(f"ALTER TABLE `{TABLE_NAME}` ADD COLUMN `{col}` BIGINT")
+            await DB.execute(f"ALTER TABLE `{TABLE_NAME}` ADD COLUMN `{col}` BIGINT DEFAULT 0")
         except mysql.errors.ProgrammingError:
             pass
 
@@ -74,9 +75,6 @@ async def open_bank(user: discord.Member) -> None:
     data = await DB.execute(f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one")
     if data is None:
         await DB.execute(f"INSERT INTO `{TABLE_NAME}`(userID) VALUES(%s)", (user.id,))
-
-        for name in columns:
-            await DB.execute(f"UPDATE `{TABLE_NAME}` SET `{name}` = %s WHERE userID = %s", (0, user.id))
 
         await DB.execute(f"UPDATE `{TABLE_NAME}` SET `wallet` = %s WHERE userID = %s", (5000, user.id))
 
@@ -95,6 +93,11 @@ async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode:
 
     users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one")
     return users
+
+
+async def reset_bank(user: discord.Member) -> None:
+    await DB.execute(f"DELETE FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,))
+    await open_bank(user)
 
 
 async def get_networth_lb() -> Any:

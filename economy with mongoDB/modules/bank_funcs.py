@@ -12,6 +12,7 @@ __all__ = [
     "open_bank",
     "get_bank_data",
     "update_bank",
+    "reset_bank",
     "get_networth_lb"
 ]
 
@@ -79,6 +80,11 @@ async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode:
     )
 
     return await get_bank_data(user, mode)
+
+
+async def reset_bank(user: discord.Member) -> None:
+    DB.cursor(TABLE_NAME).delete_one({"_id": user.id})
+    await open_bank(user)
 
 
 async def get_networth_lb() -> List[Any]:

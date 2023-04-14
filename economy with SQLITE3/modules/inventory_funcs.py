@@ -7,6 +7,7 @@ import discord
 from typing import Union, Any, Optional
 
 __all__ = [
+    "DB",
     "shop_items",
     "open_inv",
     "get_inv_data",

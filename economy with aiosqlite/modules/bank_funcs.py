@@ -10,6 +10,7 @@ __all__ = [
     "open_bank",
     "get_bank_data",
     "update_bank",
+    "reset_bank",
     "get_networth_lb"
 ]
 
@@ -90,6 +91,11 @@ async def update_bank(user: discord.Member, amount: Union[float, int] = 0, mode:
 
     users = await DB.execute(f"SELECT `{mode}` FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,), fetch="one")
     return users
+
+
+async def reset_bank(user: discord.Member) -> None:
+    await DB.execute(f"DELETE FROM `{TABLE_NAME}` WHERE userID = ?", (user.id,))
+    await open_bank(user)
 
 
 async def get_networth_lb() -> Any:

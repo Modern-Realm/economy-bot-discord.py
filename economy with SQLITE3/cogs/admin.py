@@ -9,7 +9,7 @@ class Admin(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @commands.command(aliases=["addmoney"], usage="<member*: @member> <amount*: integer> <mode*: wallet or bank>")
+    @commands.command(aliases=["addmoney"], usage="<member*: @member> <amount*: integer> <mode: wallet or bank>")
     @commands.is_owner()
     @commands.cooldown(3, 2 * 60, commands.BucketType.user)
     async def add_money(self, ctx, member: discord.Member, amount: str, mode: str = "wallet"):
@@ -30,7 +30,7 @@ class Admin(commands.Cog):
         await update_bank(member, +amount, mode)
         await ctx.reply(f"You added {amount:,} in {member.mention}'s {mode}", mention_author=False)
 
-    @commands.command(aliases=["remoney"], usage="<member*: @member> <amount*: integer> <mode*: wallet or bank>")
+    @commands.command(aliases=["remoney"], usage="<member*: @member> <amount*: integer> <mode: wallet or bank>")
     @commands.is_owner()
     @commands.cooldown(3, 2 * 60, commands.BucketType.user)
     async def remove_money(self, ctx, member: discord.Member, amount: str, mode: str = "wallet"):

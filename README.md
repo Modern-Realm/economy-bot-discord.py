@@ -96,6 +96,12 @@ These IDE(s) made things a lot easier for us:
 | remove_money | remoney  | member, amount, mode | `$remoney <member> <amount> <mode: optional>`  |
 |  reset_user  |   ---    |        member        |             `$reset_user <member>`             |
 
+**Note:**
+If your bot is not intended for public use`(personal bot)` and is only meant to be used on one or two servers
+that you own, you can add these admin commands.
+However, if your bot is publicly available for anyone to add to their server,
+it is not recommended to include these admin commands.
+
 ### • Fun commands
 
 |   Name    |   Aliases    |      Args      |                Usage                |

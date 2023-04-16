@@ -1,3 +1,13 @@
+"""
+Note
+-----
+If your bot is not intended for public use and is only meant to be used on one or two servers that you own,
+you can add these commands.
+
+However, if your bot is publicly available for anyone to add to their server,
+it is not recommended to include these commands.
+"""
+
 from modules.bank_funcs import *
 
 import discord

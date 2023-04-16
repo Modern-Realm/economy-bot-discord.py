@@ -62,13 +62,13 @@ These IDE(s) made things a lot easier for us:
 
 ### • Bank commands
 
-|                             Name                             | Aliases |      Args      |           Usage           |
-|:------------------------------------------------------------:|:-------:|:--------------:|:-------------------------:|
-|                           balance                            |   bal   |     member     | `$bal <member: optional>` |
-|                           deposit                            |   dep   |     amount     |      `$dep <amount>`      |
-|                           withdraw                           |  with   |     amount     |     `$with <amount>`      |
-| send ![Generic badge](https://img.shields.io/badge/new-gold) |   ---   | member, amount | `$send <member> <amount>` |
-|                         leaderboard                          |   lb    |      None      |          `$lb `           |
+|    Name     | Aliases |      Args      |           Usage           |
+|:-----------:|:-------:|:--------------:|:-------------------------:|
+|   balance   |   bal   |     member     | `$bal <member: optional>` |
+|   deposit   |   dep   |     amount     |      `$dep <amount>`      |
+|  withdraw   |  with   |     amount     |     `$with <amount>`      |
+|    send     |   ---   | member, amount | `$send <member> <amount>` |
+| leaderboard |   lb    |      None      |          `$lb `           |
 
 ### • Shop commands
 
@@ -90,11 +90,11 @@ These IDE(s) made things a lot easier for us:
 
 ### • Admin commands ![Generic badge](https://img.shields.io/badge/new-gold)
 
-|     Name     | Aliases  |      Args      |             Usage             |
-|:------------:|:--------:|:--------------:|:-----------------------------:|
-|  add_money   | addmoney | member, amount | `$addmoney <member> <amount>` |
-| remove_money | remoney  | member, amount | `$remoney <member> <amount>`  |
-|  reset_user  |   None   |     member     |    `$reset_user <member>`     |
+|     Name     | Aliases  |         Args         |                     Usage                      |
+|:------------:|:--------:|:--------------------:|:----------------------------------------------:|
+|  add_money   | addmoney | member, amount, mode | `$addmoney <member> <amount> <mode: optional>` |
+| remove_money | remoney  | member, amount, mode | `$remoney <member> <amount> <mode: optional>`  |
+|  reset_user  |   ---    |        member        |             `$reset_user <member>`             |
 
 ### • Fun commands
 

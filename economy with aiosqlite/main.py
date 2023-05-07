@@ -1,9 +1,10 @@
-from config import Auth
 from modules import bank_funcs, inventory_funcs
+from config import Auth
 
 import os
 import discord
 
+from pycolorise.colors import *
 from discord.ext import commands
 
 intents = discord.Intents.all()
@@ -18,14 +19,27 @@ async def on_ready():
     )
 
     # if you are not using 'discord.py >=v2.0' uncomment(add) below code
+    # print(Purple("\nLoading Cogs:"))
     # for file in os.listdir("./cogs"):
     #     if file.endswith(".py"):
-    #         client.load_extension(f"cogs.{file[:-3]}")
+    #         filename = file[:-3]
+    #         try:
+    #             client.load_extension(f"cogs.{filename}")
+    #             print(Blue(f"- {filename} ✅"))
+    #         except:
+    #             print(Blue(f"- {filename} ❌"))
 
     # if you are not using 'discord.py >=v2.0' comment(remove) below code
+    print(Purple("\nLoading Cogs:"))
     for file in os.listdir("./cogs"):
         if file.endswith(".py"):
-            await client.load_extension(f"cogs.{file[:-3]}")
+            filename = file[:-3]
+            try:
+                await client.load_extension(f"cogs.{filename}")
+                print(Blue(f"- {filename} ✅"))
+            except:
+                print(Blue(f"- {filename} ❌"))
+    print()
 
     await inventory_funcs.DB.connect()
     if not inventory_funcs.DB.is_connected:
@@ -33,9 +47,9 @@ async def on_ready():
 
     await bank_funcs.create_table()
     await inventory_funcs.create_table()
-    print("Created tables successfully")
+    print(Cyan("Created/modified tables successfully"))
 
-    print(f"{client.user.name} is online !")
+    print(Cyan(f"{client.user.name} is online !"))
 
 
 if __name__ == "__main__":

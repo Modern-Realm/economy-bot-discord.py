@@ -1,2 +1,3 @@
 python-dotenv>=0.21.0
+pycolorise>=1.0.0
 numpy>=1.24.2

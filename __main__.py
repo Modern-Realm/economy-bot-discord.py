@@ -125,11 +125,6 @@ def main():
 
     commands = parser.add_subparsers(title="Commands")
 
-    install_cmd = commands.add_parser(
-        "install", help="installs dependencies from `requirements.txt`"
-    )
-    install_cmd.set_defaults(func=lambda cmd: install_dependencies())
-
     set_cmd = commands.add_parser(
         "set", help="sets the selected database as default"
     )

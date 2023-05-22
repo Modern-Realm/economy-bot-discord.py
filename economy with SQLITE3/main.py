@@ -25,9 +25,9 @@ async def on_ready():
             filename = file[:-3]
             try:
                 client.load_extension(f"cogs.{filename}")
-                print(Blue(f"- {filename} ✅"))
+                print(Blue(f"- {filename} ✅ "))
             except:
-                print(Blue(f"- {filename} ❌"))
+                print(Blue(f"- {filename} ❌ "))
 
     # if you are using 'discord.py >=v2.0' uncomment(add) below code
     # print(Purple("\nLoading Cogs:"))
@@ -36,9 +36,9 @@ async def on_ready():
     #         filename = file[:-3]
     #         try:
     #             await client.load_extension(f"cogs.{filename}")
-    #             print(Blue(f"- {filename} ✅"))
+    #             print(Blue(f"- {filename} ✅ "))
     #         except:
-    #             print(Blue(f"- {filename} ❌"))
+    #             print(Blue(f"- {filename} ❌ "))
 
     print()
     await inventory_funcs.DB.connect()

@@ -56,6 +56,65 @@ These IDE(s) made things a lot easier for us:
 
 <hr/>
 
+## Running the bot
+
+Follow the instructions provided in `README.md` file in each of the database directories.
+`Like: economy with SQLITE3`
+
+( or )
+
+Follow the below steps one-by-one, after setting up everything you can run the bot
+using the code in **Step-4** directly later on.
+
+**Step-1:** clone the repository
+
+```shell
+git clone https://github.com/Modern-Realm/economy-bot-discord.py
+```
+
+For [discord.py](https://github.com/Rapptz/discord.py) users, clone using this command
+
+```shell
+git clone --single-branch -b alpha https://github.com/Modern-Realm/economy-bot-discord.py
+```
+
+**Step-2:** install dependencies
+
+```shell
+python -m pip install -r requirements.txt
+```
+
+**Step-3:** set the default database
+
+```shell
+py . set {database}
+```
+
+**Step-4:** run the bot
+
+```shell
+py . run
+```
+
+**Note:** if you want to delete other database directories, then use below code.
+Except the database you provided all other database directories will be deleted.
+
+```shell
+py . use {database} {force}
+```
+
+`force` - takes either `Y` or `N`. if `Y`, it will not ask you before deleting the other database dirs
+
+`database` - takes values (sqlite, aiosqlite, mysql, mongodb)
+
+use below code for more details
+
+```shell
+py .
+```
+
+<hr/>
+
 ## List of Bot Commands
 
 **`$`** is the default **command prefix**

@@ -17,7 +17,7 @@ pip install -r requirements.txt
 
 # Provide the secret keys/values in `.env` file
 
-# run the main.py file
+# Running the bot
 
 ```sh
 python main.py

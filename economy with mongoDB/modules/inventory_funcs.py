@@ -53,7 +53,7 @@ async def update_inv(user: discord.Member, amount: Union[float, int], mode: str)
         {"_id": user.id}, {"$inc": {mode: amount}}
     )
 
-    return await get_inv_data(user, mode)
+    return [await get_inv_data(user, mode)]
 
 
 async def change_inv(user: discord.Member, amount: Union[float, int, None], mode: str) -> Optional[Any]:

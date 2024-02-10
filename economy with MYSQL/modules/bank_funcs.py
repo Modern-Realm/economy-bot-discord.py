@@ -29,13 +29,17 @@ class Bank:
         conn.close()
 
     async def open_acc(self, user: discord.Member) -> None:
+        conn = await self.db.connect()
         data = await self.db.execute(
-            f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one"
+            f"SELECT * FROM `{TABLE_NAME}` WHERE userID = %s", (user.id,), fetch="one", conn=conn
         )
         if data is None:
             await self.db.run(
-                f"INSERT INTO `{TABLE_NAME}`(userID, wallet) VALUES(%s, %s)", (user.id, 5000)
+                f"INSERT INTO `{TABLE_NAME}`(userID, wallet) VALUES(%s, %s)", \
+                (user.id, 5000), conn=conn
             )
+
+        conn.close()
 
     async def get_acc(self, user: discord.Member) -> Optional[Any]:
         return await self.db.execute(

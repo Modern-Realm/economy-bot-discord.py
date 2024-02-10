@@ -52,13 +52,7 @@ class Inventory:
                 (user.id,), conn=conn
             )
 
-            for item in item_names:
-                await self.db.run(
-                    f"UPDATE `{TABLE_NAME}` SET `{item}` = 0 WHERE userID = %s",
-                    (user.id,), conn=conn
-                )
-
-            conn.close()
+        conn.close()
 
     async def get_acc(self, user: discord.Member) -> Optional[Any]:
         return await self.db.execute(

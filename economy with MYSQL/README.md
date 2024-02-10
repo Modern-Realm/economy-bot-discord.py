@@ -1,37 +1,63 @@
 # 📙Quickstart
 
-# clone the repository
+# Method - 1
 
-```sh
+## clone the repository
+
+```shell
 git clone https://github.com/Modern-Realm/economy-bot-discord.py
 ```
 
-# Setting up the working directory & installing packages
+## Setting up the working directory & installing packages
 
-```sh
+```shell
 cd "economy-bot-discord.py/economy with MYSQL"
 pip install -r requirements.txt
 ```
 
 **Note:** make sure to install **any one** of these package`(discord.py, py-cord or nextcord)`
 
-# Provide the secret keys/values in `.env` file
+### Provide the secret keys/values in `.env` file
 
-# Running the bot
+## Running the bot
 
-```sh
+```shell
 python main.py
 ```
 
 🎉 Your discord bot should be online and ready to use!
 
-<hr>
+# Method - 2
+
+## Download the source file
+
+- [click here](https://github.com/Modern-Realm/economy-bot-discord.py/releases/download/v3.0.7/economy.with.MYSQL.zip)
+to download the `zip` file.
+- extract all the files & folders
+
+## Install required packages
+
+```shell
+pip install -r requirements.txt
+```
+
+**Note:** make sure to install **any one** of these package`(discord.py, py-cord or nextcord)`
+
+## Running the bot
+
+```shell
+python main.py
+```
+
+🎉 Your discord bot should be online and ready to use!
+
+---
 
 # Note: for discord.py users
 
 **You can just clone [`branch:alpha`](https://github.com/Modern-Realm/economy-bot-discord.py/tree/alpha)**
 
-```sh
+```shell
 git clone --single-branch -b alpha https://github.com/Modern-Realm/economy-bot-discord.py
 ```
 

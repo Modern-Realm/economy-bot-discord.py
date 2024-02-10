@@ -1,4 +1,4 @@
-from modules.inventory_funcs import *
+from base import EconomyBot
 
 import discord
 
@@ -6,21 +6,22 @@ from discord.ext import commands
 
 
 class Shop(commands.Cog):
-    def __init__(self, client: commands.Bot):
+    def __init__(self, client: EconomyBot):
         self.client = client
+        self.inv = self.client.db.inv
 
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     async def shop(self, ctx):
         user = ctx.author
-        await open_inv(user)
+        await self.inv.open_acc(user)
 
         em = discord.Embed(
             title="SHOP",
             color=discord.Color(0x00ff00)
         )
         x = 1
-        for item in shop_items:
+        for item in self.inv.shop_items:
             name = item["name"]
             cost = item["cost"]
             item_id = item["id"]
@@ -36,8 +37,7 @@ class Shop(commands.Cog):
     @shop.command(usage="<item_name*: string>")
     @commands.guild_only()
     async def info(self, ctx, *, item_name: str):
-        user = ctx.author
-        for item in shop_items:
+        for item in self.inv.shop_items:
             name = item["name"]
             cost = item["cost"]
             item_info = item["info"]

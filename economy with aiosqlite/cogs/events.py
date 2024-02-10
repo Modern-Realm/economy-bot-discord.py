@@ -1,4 +1,4 @@
-from config import Auth
+from base import Auth
 
 import discord
 

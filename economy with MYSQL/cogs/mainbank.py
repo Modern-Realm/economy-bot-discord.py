@@ -1,4 +1,4 @@
-from modules.bank_funcs import *
+from base import EconomyBot
 
 import discord
 
@@ -7,8 +7,9 @@ from discord.ext import commands
 
 
 class MainBank(commands.Cog):
-    def __init__(self, client: commands.Bot):
+    def __init__(self, client: EconomyBot):
         self.client = client
+        self.bank = self.client.db.bank
 
     @commands.command(aliases=["bal"], usage=f"<member: @member>")
     @commands.guild_only()
@@ -17,9 +18,9 @@ class MainBank(commands.Cog):
         user_av = user.display_avatar or user.default_avatar
         if user.bot:
             return await ctx.reply("Bot's don't have account", mention_author=False)
-        await open_bank(user)
+        await self.bank.open_acc(user)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         wallet_amt = users[1]
         bank_amt = users[2]
         net_amt = int(wallet_amt + bank_amt)
@@ -36,14 +37,14 @@ class MainBank(commands.Cog):
     @commands.guild_only()
     async def withdraw(self, ctx, amount: str):
         user = ctx.author
-        await open_bank(user)
+        await self.bank.open_acc(user)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         bank_amt = users[2]
 
         if amount.lower() == "all" or amount.lower() == "max":
-            await update_bank(user, +1 * bank_amt)
-            await update_bank(user, -1 * bank_amt, "bank")
+            await self.bank.update_acc(user, +1 * bank_amt)
+            await self.bank.update_acc(user, -1 * bank_amt, "bank")
             return await ctx.reply(f"You withdrew {bank_amt:,} in your wallet", mention_author=False)
 
         amount = int(amount)
@@ -52,21 +53,21 @@ class MainBank(commands.Cog):
         if amount < 0:
             return await ctx.reply("Enter a valid amount !", mention_author=False)
 
-        await update_bank(user, +amount)
-        await update_bank(user, -amount, "bank")
+        await self.bank.update_acc(user, +amount)
+        await self.bank.update_acc(user, -amount, "bank")
         await ctx.reply(f"You withdrew {amount:,} from your bank", mention_author=False)
 
     @commands.command(aliases=["dep"], usage="<amount*: integer or all>")
     @commands.guild_only()
     async def deposit(self, ctx, amount: str):
         user = ctx.author
-        await open_bank(user)
+        await self.bank.open_acc(user)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         wallet_amt = users[1]
         if amount.lower() == "all" or amount.lower() == "max":
-            await update_bank(user, -wallet_amt)
-            await update_bank(user, +wallet_amt, "bank")
+            await self.bank.update_acc(user, -wallet_amt)
+            await self.bank.update_acc(user, +wallet_amt, "bank")
             return await ctx.reply(f"You deposited {wallet_amt:,} in your bank", mention_author=False)
 
         amount = int(amount)
@@ -75,8 +76,8 @@ class MainBank(commands.Cog):
         if amount < 0:
             return await ctx.reply(f"Enter a valid amount !", mention_author=False)
 
-        await update_bank(user, -amount)
-        await update_bank(user, +amount, "bank")
+        await self.bank.update_acc(user, -amount)
+        await self.bank.update_acc(user, +amount, "bank")
         await ctx.reply(f"You deposited {amount:,} in your bank", mention_author=False)
 
     @commands.command(usage="<member*: @member> <amount*: integer>")
@@ -86,24 +87,24 @@ class MainBank(commands.Cog):
         if member.bot:
             return await ctx.reply("Bot's don't have account", mention_author=False)
 
-        await open_bank(user)
-        await open_bank(member)
+        await self.bank.open_acc(user)
+        await self.bank.open_acc(member)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         wallet_amt = users[1]
         if amount <= 0:
             return await ctx.reply("Enter a valid amount !", mention_author=False)
         if amount > wallet_amt:
             return await ctx.reply("You don't have enough amount", mention_author=False)
 
-        await update_bank(user, -amount)
-        await update_bank(member, +amount)
+        await self.bank.update_acc(user, -amount)
+        await self.bank.update_acc(member, +amount)
         await ctx.reply(f"You sent {amount:,} to {member.mention}", mention_author=False)
 
     @commands.command(aliases=["lb"])
     @commands.guild_only()
     async def leaderboard(self, ctx):
-        users = await get_networth_lb()
+        users = await self.bank.get_networth_lb()
 
         data = []
         index = 1

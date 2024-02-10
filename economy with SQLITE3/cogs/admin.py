@@ -8,7 +8,7 @@ However, if your bot is publicly available for anyone to add to their server,
 it is not recommended to include these commands.
 """
 
-from modules.bank_funcs import *
+from base import EconomyBot
 
 import discord
 
@@ -16,8 +16,10 @@ from discord.ext import commands
 
 
 class Admin(commands.Cog):
-    def __init__(self, client: commands.Bot):
+    def __init__(self, client: EconomyBot):
         self.client = client
+        self.bank = self.client.db.bank
+        self.inv = self.client.db.inv
 
     @commands.command(aliases=["addmoney"], usage="<member*: @member> <amount*: integer> <mode: wallet or bank>")
     @commands.is_owner()
@@ -36,8 +38,8 @@ class Admin(commands.Cog):
         if amount > limit:
             return await ctx.reply(f"You cannot add money more than {limit:,}")
 
-        await open_bank(member)
-        await update_bank(member, +amount, mode)
+        await self.bank.open_acc(member)
+        await self.bank.update_acc(member, +amount, mode)
         await ctx.reply(f"You added {amount:,} in {member.mention}'s {mode}", mention_author=False)
 
     @commands.command(aliases=["remoney"], usage="<member*: @member> <amount*: integer> <mode: wallet or bank>")
@@ -53,16 +55,16 @@ class Admin(commands.Cog):
             return await ctx.reply("Please enter either wallet or bank only")
 
         amount = int(amount)
-        await open_bank(member)
+        await self.bank.open_acc(member)
 
-        users = await get_bank_data(member)
+        users = await self.bank.get_acc(member)
         user_amt = users[2 if mode == "bank" else 1]
         if user_amt < amount:
             return await ctx.reply(
                 f"You can only remove {user_amt:,} from {member.mention}'s {mode}"
             )
 
-        await update_bank(member, -amount, mode)
+        await self.bank.update_acc(member, -amount, mode)
         await ctx.reply(f"You removed {amount:,} from {member.mention}'s {mode}", mention_author=False)
 
     @commands.command(usage="<member*: @member>")
@@ -72,11 +74,11 @@ class Admin(commands.Cog):
         if member.bot:
             return await ctx.reply("Bots don't have account", mention_author=False)
 
-        users = await get_bank_data(member)
+        users = await self.bank.get_acc(member)
         if users is None:
-            await open_bank(member)
+            await self.bank.open_acc(member)
         else:
-            await reset_bank(member)
+            await self.bank.reset_acc(member)
 
         return await ctx.reply(f"{member.mention}'s account has been reset", mention_author=False)
 

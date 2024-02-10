@@ -1,4 +1,4 @@
-from modules.bank_funcs import *
+from base import EconomyBot
 
 import discord
 import asyncio
@@ -9,21 +9,22 @@ from discord.ext import commands
 
 
 class Fun(commands.Cog):
-    def __init__(self, client: commands.Bot):
+    def __init__(self, client: EconomyBot):
         self.client = client
+        self.bank = self.client.db.bank
 
     @commands.command(aliases=["cf", "coinflip"], usage="<bet_on*: heads(H) or tails(T)> <amount*: integer>")
     @commands.guild_only()
     async def coin_flip(self, ctx, bet_on: str, amount: int):
         user = ctx.author
-        await open_bank(user)
+        await self.bank.open_acc(user)
 
         bet_on = "heads" if "h" in bet_on.lower() else "tails"
         if not 500 <= amount <= 5000:
             return await ctx.reply("You can only bet amount between 500 and 5000", mention_author=False)
 
         reward = round(amount / 2)
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         if users[1] < amount:
             return await ctx.reply("You don't have enough money", mention_author=False)
 
@@ -31,21 +32,21 @@ class Fun(commands.Cog):
         result = random.choice(coin)
 
         if result != bet_on:
-            await update_bank(user, -amount)
+            await self.bank.update_acc(user, -amount)
             return await ctx.reply(f"Got {result}, you lost {amount:,}", mention_author=False)
 
-        await update_bank(user, +reward)
+        await self.bank.update_acc(user, +reward)
         return await ctx.reply(f"Got {result}, you won {amount + reward:,}", mention_author=False)
 
     @commands.command(usage="<amount*: integer")
     @commands.guild_only()
     async def slots(self, ctx: commands.Context, amount: int):
         user = ctx.author
-        await open_bank(user)
+        await self.bank.open_acc(user)
         if not 1000 <= amount <= 10000:
             return await ctx.reply("You can only bet amount between 1000 and 10000", mention_author=False)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         if users[1] < amount:
             return await ctx.reply("You don't have enough money", mention_author=False)
 
@@ -91,14 +92,14 @@ class Fun(commands.Cog):
         s3 = slot[2]
         if s1 == s2 == s3:
             reward = round(amount / 2)
-            await update_bank(user, +reward)
+            await self.bank.update_acc(user, +reward)
             content = f"{user.mention} Jackpot! you won {amount + reward:,}"
         elif s1 == s2 or s2 == s3 or s1 == s3:
             reward = round(amount / 4)
-            await update_bank(user, +reward)
+            await self.bank.update_acc(user, +reward)
             content = f"{user.mention} GG! you only won {amount + reward:,}"
         else:
-            await update_bank(user, -amount)
+            await self.bank.update_acc(user, -amount)
             content = f"{user.mention} You lost {amount:,}"
 
         return await msg.edit(content=content, embed=em)
@@ -106,7 +107,7 @@ class Fun(commands.Cog):
     @commands.command(usage="<amount*: integer> <bet_on: integer>")
     async def dice(self, ctx, amount: int, bet_on: int = 6):
         user = ctx.author
-        await open_bank(user)
+        await self.bank.open_acc(user)
 
         rdice = [1, 2, 3, 4, 5, 6]
         if bet_on not in rdice:
@@ -115,17 +116,17 @@ class Fun(commands.Cog):
         if not 1000 <= amount <= 5000:
             return await ctx.reply("You can only bet amount between 1000 and 5000", mention_author=False)
 
-        users = await get_bank_data(user)
+        users = await self.bank.get_acc(user)
         if users[1] < amount:
             return await ctx.reply("You don't have enough money", mention_author=False)
 
         rand_num = random.choice(rdice)
         if rand_num != bet_on:
-            await update_bank(user, -amount)
+            await self.bank.update_acc(user, -amount)
             return await ctx.reply(f"Got {rand_num}, you lost {amount:,}", mention_author=False)
 
         reward = round(amount / 2)
-        await update_bank(user, +reward)
+        await self.bank.update_acc(user, +reward)
         await ctx.reply(f"Got {rand_num}, you won {amount + reward:,}", mention_author=False)
 
 

@@ -1,16 +1,11 @@
-from modules.bank_funcs import DB
+from modules.ext import Database
 
 import discord
 
-from typing import Union, Any, Optional
+from typing import List, Union, Any, Optional
 
 __all__ = [
-    "DB",
-    "shop_items",
-    "open_inv",
-    "get_inv_data",
-    "update_inv",
-    "change_inv"
+    "Inventory"
 ]
 
 TABLE_NAME = "inventory"  # Enter the table name here (tip:- use only lowercase letters)
@@ -24,41 +19,49 @@ shop_items = [
 item_names = [item["name"] for item in shop_items]
 
 
-async def create_table():
-    if TABLE_NAME not in DB.db.list_collection_names():
-        DB.db.create_collection(TABLE_NAME)
+class Inventory:
+    def __init__(self, database: Database):
+        self._conn = database
 
+    @property
+    def shop_items(self) -> List:
+        return shop_items
 
-async def open_inv(user: discord.Member):
-    doc = {"_id": user.id}
-    user_data = DB.cursor(TABLE_NAME).find_one(doc)
-    if user_data is not None:
-        return
+    async def create_table(self):
+        if TABLE_NAME not in self._conn.db.list_collection_names():
+            self._conn.db.create_collection(TABLE_NAME)
 
-    for name in item_names:
-        doc.setdefault(name, 0)
-    DB.cursor(TABLE_NAME).insert_one(doc)
+    async def open_acc(self, user: discord.Member):
+        doc = {"_id": user.id}
+        user_data = self._conn.cursor(TABLE_NAME).find_one(doc)
+        if user_data is not None:
+            return
 
+        for name in item_names:
+            doc.setdefault(name, 0)
+        self._conn.cursor(TABLE_NAME).insert_one(doc)
 
-async def get_inv_data(user: discord.Member, mode: str = None) -> Optional[Any]:
-    user_data = DB.cursor(TABLE_NAME).find_one({"_id": user.id})
-    if mode is None:
-        return [_ for _ in user_data.values()]
+    async def get_acc(self, user: discord.Member, mode: str = None) -> Optional[Any]:
+        user_data = self._conn.cursor(TABLE_NAME).find_one({"_id": user.id})
+        if mode is None:
+            return [_ for _ in user_data.values()]
 
-    return user_data.get(mode)
+        return user_data.get(mode)
 
+    async def update_acc(
+        self, user: discord.Member, amount: Union[float, int], mode: str
+    ) -> Optional[Any]:
+        self._conn.cursor(TABLE_NAME).update_one(
+            {"_id": user.id}, {"$inc": {mode: amount}}
+        )
 
-async def update_inv(user: discord.Member, amount: Union[float, int], mode: str) -> Optional[Any]:
-    DB.cursor(TABLE_NAME).update_one(
-        {"_id": user.id}, {"$inc": {mode: amount}}
-    )
+        return [await self.get_acc(user, mode)]
 
-    return [await get_inv_data(user, mode)]
+    async def change_acc(
+        self, user: discord.Member, amount: Union[float, int, None], mode: str
+    ) -> Optional[Any]:
+        self._conn.cursor(TABLE_NAME).update_one(
+            {"_id": user.id}, {"$set": {mode: amount}}
+        )
 
-
-async def change_inv(user: discord.Member, amount: Union[float, int, None], mode: str) -> Optional[Any]:
-    DB.cursor(TABLE_NAME).update_one(
-        {"_id": user.id}, {"$set": {mode: amount}}
-    )
-
-    return await get_inv_data(user, mode)
+        return await self.get_acc(user, mode)

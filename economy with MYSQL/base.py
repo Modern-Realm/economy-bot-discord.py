@@ -33,7 +33,7 @@ class EconomyBot(commands.Bot):
 
         self.db = Database(
             host=Auth.DB_HOST, port=Auth.DB_PORT,
-            user=Auth.DB_USER, passwd=Auth.DB_PASSWD, db_name=Auth.DB_NAME
+            username=Auth.DB_USER, passwd=Auth.DB_PASSWD, db_name=Auth.DB_NAME
         )
 
     async def on_ready(self):
